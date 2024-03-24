@@ -8,6 +8,7 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
+import Link from "next/link";
 const { Header, Sider, Content } = Layout;
 
 export default function AdminLayout({ children }) {
@@ -17,31 +18,24 @@ export default function AdminLayout({ children }) {
   } = theme.useToken();
 
   return (
-    <Layout className="h-screen">
+    <Layout className="h-[calc(100vh-4rem)]">
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
         <Menu
           theme="dark"
           mode="inline"
           defaultSelectedKeys={["1"]}
-          items={[
-            {
-              key: "1",
-              icon: <UserOutlined />,
-              label: "Hospitals",
-            },
-            {
-              key: "2",
-              icon: <VideoCameraOutlined />,
-              label: "Doctors",
-            },
-            {
-              key: "3",
-              icon: <UploadOutlined />,
-              label: "Patients",
-            },
-          ]}
-        />
+        >
+          <Menu.Item key="1" icon={<UserOutlined />}>
+            <Link href="/admin/hospitals">Hospitals</Link>
+          </Menu.Item>
+          <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+            <Link href="/admin/doctors">Doctors</Link>
+          </Menu.Item>
+          <Menu.Item key="3" icon={<UploadOutlined />}>
+            <Link href="/admin/patients">Patients</Link>
+          </Menu.Item>
+        </Menu>
       </Sider>
       <Layout>
         <Header
