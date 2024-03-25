@@ -108,7 +108,7 @@ export default function DashboardHospitalPage() {
           }}
         ></Input>
         <Input
-          className="mt-6"
+          className="top-1"
           value={editingHospital?.author}
           onChange={(e) => {
             setEditingHospital((prev: any) => {
