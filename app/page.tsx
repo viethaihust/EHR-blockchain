@@ -7,19 +7,19 @@ export default function Home() {
   const router = useRouter();
 
   return (
-  <div>
-    <div className="p-4">
-      <Button
-        onClick={() => {
-          router.push("/dashboard");
-        }}
-      >
-        Open Dashboard
-      </Button>
-    </div>
     <div>
+      <div className="p-4">
+        <Button
+          onClick={() => {
+            router.push("/dashboard");
+          }}
+        >
+          Open Dashboard
+        </Button>
+      </div>
+      <div>
         <HomeBanner></HomeBanner>
+      </div>
     </div>
-  </div>
   );
 }

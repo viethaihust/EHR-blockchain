@@ -15,7 +15,7 @@ export default function DashboardLayout({
       <Layout className="!bg-white" style={{}}>
         <DashboardSidebar />
         <Layout className="p-3">
-          <Content className="p-6 rounded-lg m-0 bg-white">{children}</Content>
+          <Content className="m-0 rounded-lg bg-white p-6">{children}</Content>
         </Layout>
       </Layout>
     </Layout>

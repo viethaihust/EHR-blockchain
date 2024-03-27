@@ -14,7 +14,7 @@ type FieldType = {
   specialty: string;
 };
 
-const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
+const onFinish: FormProps<FieldType>["onFinish"] = values => {
   console.log("Success:", values);
 };
 
@@ -24,7 +24,9 @@ const items: TabsProps["items"] = [
     label: "View doctors",
     children: (
       <>
-        <div><Table></Table></div>
+        <div>
+          <Table></Table>
+        </div>
       </>
     ),
   },

@@ -11,8 +11,8 @@ export default function DashboardHospitalPage() {
   const dataType = "quotes";
   useEffect(() => {
     fetch(`https://dummyjson.com/${dataType}`)
-      .then((res) => res.json())
-      .then((result) => {
+      .then(res => res.json())
+      .then(result => {
         const list = result[dataType] || [];
         const firstObject = list[0] || {};
         const cols = [];
@@ -22,7 +22,7 @@ export default function DashboardHospitalPage() {
           };
           if (typeof firstObject[key] === "object") {
             if (Array.isArray(firstObject[key])) {
-              render = (value) => {
+              render = value => {
                 return (
                   <span>
                     {value.map((tag: any) => {
@@ -32,11 +32,11 @@ export default function DashboardHospitalPage() {
                 );
               };
             } else {
-              render = (value) => {
+              render = value => {
                 console.log(value);
                 return (
                   <span>
-                    {Object.keys(value).map((key) => {
+                    {Object.keys(value).map(key => {
                       return (
                         <div>
                           {key}: {value[key]}
@@ -91,8 +91,8 @@ export default function DashboardHospitalPage() {
     Modal.confirm({
       title: "Are you sure you want to delete?",
       onOk: () => {
-        setDataSource((prev) => {
-          return prev.filter((result) => result.id !== record.id);
+        setDataSource(prev => {
+          return prev.filter(result => result.id !== record.id);
         });
       },
     });
@@ -133,7 +133,7 @@ export default function DashboardHospitalPage() {
       >
         <Input
           value={editingHospital?.quote}
-          onChange={(e) => {
+          onChange={e => {
             setEditingHospital((prev: any) => {
               return { ...prev, quote: e.target.value };
             });
@@ -142,7 +142,7 @@ export default function DashboardHospitalPage() {
         <Input
           className="top-1"
           value={editingHospital?.author}
-          onChange={(e) => {
+          onChange={e => {
             setEditingHospital((prev: any) => {
               return { ...prev, author: e.target.value };
             });

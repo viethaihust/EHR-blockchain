@@ -8,7 +8,7 @@ export default function DashboardHeader() {
   const router = useRouter();
 
   return (
-    <Header className="flex justify-between items-center !bg-white border-b-2">
+    <Header className="flex items-center justify-between border-b-2 !bg-white">
       <Button
         onClick={() => {
           router.push(`/`);
