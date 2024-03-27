@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Table, Button, Modal, Input } from "antd";
+import { Table, Button, Modal, Input, Tag } from "antd";
 import { useState, useEffect } from "react";
 
 export default function DashboardHospitalPage() {
@@ -8,18 +8,50 @@ export default function DashboardHospitalPage() {
   const [editingHospital, setEditingHospital] = useState<any>(null);
   const [columns, setColumns] = useState<any[]>([]);
   const [dataSource, setDataSource] = useState<any[]>([]);
-
+  const dataType = "quotes";
   useEffect(() => {
-    fetch("https://dummyjson.com/quotes")
+    fetch(`https://dummyjson.com/${dataType}`)
       .then((res) => res.json())
       .then((result) => {
-        const list = result.quotes || [];
+        const list = result[dataType] || [];
         const firstObject = list[0] || {};
         const cols = [];
         for (const key in firstObject) {
+          let render = (value: any) => {
+            return <span>{String(value)}</span>;
+          };
+          if (typeof firstObject[key] === "object") {
+            if (Array.isArray(firstObject[key])) {
+              render = (value) => {
+                return (
+                  <span>
+                    {value.map((tag: any) => {
+                      return <Tag>{tag}</Tag>;
+                    })}
+                  </span>
+                );
+              };
+            } else {
+              render = (value) => {
+                console.log(value);
+                return (
+                  <span>
+                    {Object.keys(value).map((key) => {
+                      return (
+                        <div>
+                          {key}: {value[key]}
+                        </div>
+                      );
+                    })}
+                  </span>
+                );
+              };
+            }
+          }
           const col = {
-            title: key,
+            title: String(key).charAt(0).toUpperCase() + String(key).slice(1),
             dataIndex: key,
+            render: render,
           };
           cols.push(col);
         }
@@ -51,7 +83,7 @@ export default function DashboardHospitalPage() {
           ),
         });
         setColumns(cols);
-        setDataSource(result.quotes);
+        setDataSource(list);
       });
   }, []);
 
