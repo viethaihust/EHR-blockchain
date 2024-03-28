@@ -14,7 +14,7 @@ type FieldType = {
   specialty: string;
 };
 
-const onFinish: FormProps<FieldType>["onFinish"] = values => {
+const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
   console.log("Success:", values);
 };
 
@@ -24,9 +24,7 @@ const items: TabsProps["items"] = [
     label: "View doctors",
     children: (
       <>
-        <div>
-          <Table></Table>
-        </div>
+        <div><Table></Table></div>
       </>
     ),
   },
@@ -51,7 +49,7 @@ const items: TabsProps["items"] = [
               rules={[
                 {
                   required: true,
-                  message: "Please enter your name",
+                  message: "Please enter name",
                 },
                 {
                   whitespace: true,
@@ -60,7 +58,7 @@ const items: TabsProps["items"] = [
               ]}
               hasFeedback
             >
-              <Input placeholder="Enter your name" />
+              <Input placeholder="Enter name" />
             </Form.Item>
 
             <Form.Item<FieldType>
@@ -69,7 +67,7 @@ const items: TabsProps["items"] = [
               rules={[
                 {
                   required: true,
-                  message: "Please enter your email",
+                  message: "Please enter email",
                 },
                 {
                   whitespace: true,
@@ -78,7 +76,7 @@ const items: TabsProps["items"] = [
               ]}
               hasFeedback
             >
-              <Input placeholder="Enter your email" />
+              <Input placeholder="Enter email" />
             </Form.Item>
 
             <Form.Item<FieldType>
@@ -87,7 +85,7 @@ const items: TabsProps["items"] = [
               rules={[
                 {
                   required: true,
-                  message: "Please enter your phone number",
+                  message: "Please enter phone number",
                 },
                 {
                   whitespace: true,
@@ -96,7 +94,7 @@ const items: TabsProps["items"] = [
               ]}
               hasFeedback
             >
-              <Input placeholder="Enter your phone number" />
+              <Input placeholder="Enter phone number" />
             </Form.Item>
 
             <Form.Item<FieldType> label="Gender" name="gender">
