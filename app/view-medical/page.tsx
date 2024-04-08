@@ -1,14 +1,21 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useReadContract } from "wagmi";
+import { useAccount, useReadContract } from "wagmi";
 import HomeHeader from "../components/HomeHeader";
 import { patientListContract } from "@/smart-contracts/ExampleAbi";
 
 export default function ViewMedical() {
-  const [patientMedicalData, setPatientData] = useState<any>(null);
+  const { address } = useAccount();
+  const [patientData, setPatientData] = useState<any>(null);
+
+  if (!address) {
+    console.log("Error");
+    return;
+  }
   const { data: patientDetailData, isSuccess } = useReadContract({
     ...patientListContract,
-    functionName: "viewMedical",
+    functionName: "getPatientMedicalList",
+    args: [address],
   });
 
   useEffect(() => {
@@ -17,12 +24,12 @@ export default function ViewMedical() {
     }
   }, [isSuccess, patientDetailData]);
 
-  console.log(patientMedicalData);
+  console.log(patientData);
 
   return (
     <div>
       <HomeHeader></HomeHeader>
-      {patientMedicalData && (
+      {patientData && (
         <div className="ml-20 mt-10">
           <div className="mt-6 overflow-hidden">
             <table className="table-auto">
@@ -39,7 +46,7 @@ export default function ViewMedical() {
                     Weight
                   </td>
                   <td className="border border-emerald-500 px-4 py-2 font-medium text-emerald-600">
-                    {patientMedicalData?.weight}kg
+                    {patientData?.weight.toString()}kg
                   </td>
                 </tr>
                 <tr>
@@ -47,7 +54,7 @@ export default function ViewMedical() {
                     Height
                   </td>
                   <td className="border border-emerald-500 px-4 py-2 font-medium text-emerald-600">
-                    {patientMedicalData?.height}cm
+                    {patientData?.height.toString()}cm
                   </td>
                 </tr>
                 <tr>
@@ -55,7 +62,7 @@ export default function ViewMedical() {
                     Blood Group
                   </td>
                   <td className="border border-emerald-500 px-4 py-2 font-medium text-emerald-600">
-                    {patientMedicalData?.bloodGroup}
+                    {patientData?.bloodGroup}
                   </td>
                 </tr>
                 <tr>
@@ -63,7 +70,7 @@ export default function ViewMedical() {
                     Disease Name
                   </td>
                   <td className="border border-emerald-500 px-4 py-2 font-medium text-emerald-600">
-                    {patientMedicalData?.diseaseName}
+                    {patientData?.diseaseName}
                   </td>
                 </tr>
                 <tr>
@@ -71,7 +78,7 @@ export default function ViewMedical() {
                     Disease Description
                   </td>
                   <td className="border border-emerald-500 px-4 py-2 font-medium text-emerald-600">
-                    {patientMedicalData?.diseaseDescription}
+                    {patientData?.diseaseDescription}
                   </td>
                 </tr>
                 <tr>
@@ -79,7 +86,7 @@ export default function ViewMedical() {
                     Disease Started On
                   </td>
                   <td className="border border-emerald-500 px-4 py-2 font-medium text-emerald-600">
-                    {patientMedicalData?.diseaseStartedOn}
+                    {patientData?.diseaseStartedOn}
                   </td>
                 </tr>
               </tbody>
