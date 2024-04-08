@@ -1,28 +1,48 @@
 "use client";
-import { Button } from "antd";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import HomeBanner from "./components/HomeBanner";
-import Link from "next/link";
+import HomeHeader from "./components/HomeHeader";
+import { Auth } from "./components/auth";
+import { db } from "@/firebase.config";
+import { getDocs, collection } from "firebase/firestore";
 
 export default function Home() {
-  const router = useRouter();
+  const [userList, setUserList] = useState<any>([]);
 
+  const usersCollectionRef = collection(db, "users");
+  useEffect(() => {
+    const getUserList = async () => {
+      try {
+        const data = await getDocs(usersCollectionRef);
+        const filteredData = data.docs.map(doc => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setUserList(filteredData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUserList();
+  }, [usersCollectionRef]);
   return (
     <div>
-      <div className="p-4">
-        <Button
-          onClick={() => {
-            router.push("/dashboard");
-          }}
-        >
-          Open Dashboard
-        </Button>
-        <Link href="/testsc" className="ml-6">
-          <Button>Test SC</Button>
-        </Link>
+      <div>
+        <HomeHeader />
       </div>
       <div>
-        <HomeBanner></HomeBanner>
+        <HomeBanner />
+      </div>
+      <div>
+        <Auth />
+      </div>
+      <div>
+        {userList.map((user: any) => (
+          <div key={user.name}>
+            <div>{user.name}</div>
+            <div>{user.age}</div>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -17,7 +17,6 @@ export default function DashboardHeader() {
       >
         Home
       </Button>
-      <ConnectButton />
     </Header>
   );
 }

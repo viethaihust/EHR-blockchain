@@ -1,25 +1,16 @@
 "use client";
 import "./globals.scss";
-import '@rainbow-me/rainbowkit/styles.css';
-import { WagmiProvider } from "wagmi";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "@rainbow-me/rainbowkit/styles.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { wagmiConfig } from "../wagmi.config";
-import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import Provider from "./provider";
 
-const queryClient = new QueryClient();
-
-const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
+const RootLayout = ({ children }: React.PropsWithChildren) => {
   return (
     <html lang="en">
       <body>
-        <WagmiProvider config={wagmiConfig}>
-          <QueryClientProvider client={queryClient}>
-            <RainbowKitProvider>
-              <AntdRegistry>{children}</AntdRegistry>
-            </RainbowKitProvider>
-          </QueryClientProvider>
-        </WagmiProvider>
+        <Provider>
+          <AntdRegistry>{children}</AntdRegistry>
+        </Provider>
       </body>
     </html>
   );

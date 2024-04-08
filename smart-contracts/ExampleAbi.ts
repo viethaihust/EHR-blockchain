@@ -1,35 +1,162 @@
-export const Example_abi = [
-  {
-    inputs: [],
-    name: "increase",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_num",
-        type: "uint256",
-      },
-    ],
-    name: "initialValue",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "number",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-] as const;
+export const patientListContract = {
+  address: "0xdb2293283B2278c9Bd62b9D1c352280d13Ad8d00",
+  abi: [
+    {
+      inputs: [{ internalType: "address", name: "", type: "address" }],
+      name: "PatientBioList",
+      outputs: [
+        { internalType: "address", name: "id", type: "address" },
+        { internalType: "string", name: "name", type: "string" },
+        { internalType: "string", name: "birthDate", type: "string" },
+        { internalType: "string", name: "phoneNumber", type: "string" },
+        { internalType: "string", name: "_address", type: "string" },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [{ internalType: "address", name: "", type: "address" }],
+      name: "PatientMedicalList",
+      outputs: [
+        { internalType: "address", name: "id", type: "address" },
+        { internalType: "uint256", name: "weight", type: "uint256" },
+        { internalType: "uint256", name: "height", type: "uint256" },
+        { internalType: "string", name: "bloodGroup", type: "string" },
+        { internalType: "string", name: "diseaseName", type: "string" },
+        { internalType: "string", name: "diseaseDescription", type: "string" },
+        { internalType: "string", name: "diseaseStartedOn", type: "string" },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [
+        { internalType: "address", name: "id", type: "address" },
+        { internalType: "string", name: "patientName", type: "string" },
+        { internalType: "string", name: "birthDate", type: "string" },
+        { internalType: "string", name: "phoneNumber", type: "string" },
+        { internalType: "string", name: "_address", type: "string" },
+      ],
+      name: "addUpdatePatientBio",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [
+        { internalType: "address", name: "id", type: "address" },
+        { internalType: "uint256", name: "weight", type: "uint256" },
+        { internalType: "uint256", name: "height", type: "uint256" },
+        { internalType: "string", name: "bloodGroup", type: "string" },
+        { internalType: "string", name: "diseaseName", type: "string" },
+        { internalType: "string", name: "diseaseDescription", type: "string" },
+        { internalType: "string", name: "diseaseStartedOn", type: "string" },
+      ],
+      name: "addUpdatePatientMedicalData",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "addr",
+      outputs: [{ internalType: "address", name: "", type: "address" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [{ internalType: "address", name: "id", type: "address" }],
+      name: "getPatientBioList",
+      outputs: [
+        {
+          components: [
+            { internalType: "address", name: "id", type: "address" },
+            { internalType: "string", name: "name", type: "string" },
+            { internalType: "string", name: "birthDate", type: "string" },
+            { internalType: "string", name: "phoneNumber", type: "string" },
+            { internalType: "string", name: "_address", type: "string" },
+          ],
+          internalType: "struct Example.PatientBio",
+          name: "",
+          type: "tuple",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [{ internalType: "address", name: "id", type: "address" }],
+      name: "getPatientMedicalList",
+      outputs: [
+        {
+          components: [
+            { internalType: "address", name: "id", type: "address" },
+            { internalType: "uint256", name: "weight", type: "uint256" },
+            { internalType: "uint256", name: "height", type: "uint256" },
+            { internalType: "string", name: "bloodGroup", type: "string" },
+            { internalType: "string", name: "diseaseName", type: "string" },
+            {
+              internalType: "string",
+              name: "diseaseDescription",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "diseaseStartedOn",
+              type: "string",
+            },
+          ],
+          internalType: "struct Example.PatientMedicalData",
+          name: "",
+          type: "tuple",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "patientCount",
+      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+      name: "patients",
+      outputs: [{ internalType: "address", name: "", type: "address" }],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "viewMedical",
+      outputs: [
+        {
+          components: [
+            { internalType: "address", name: "id", type: "address" },
+            { internalType: "uint256", name: "weight", type: "uint256" },
+            { internalType: "uint256", name: "height", type: "uint256" },
+            { internalType: "string", name: "bloodGroup", type: "string" },
+            { internalType: "string", name: "diseaseName", type: "string" },
+            {
+              internalType: "string",
+              name: "diseaseDescription",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "diseaseStartedOn",
+              type: "string",
+            },
+          ],
+          internalType: "struct Example.PatientMedicalData",
+          name: "",
+          type: "tuple",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+  ],
+} as const;
