@@ -1,7 +1,6 @@
 "use client";
 import { Button, Layout } from "antd";
 import { useRouter } from "next/navigation";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const { Header } = Layout;
 
@@ -17,7 +16,6 @@ export default function DashboardHeader() {
       >
         Home
       </Button>
-      <ConnectButton />
     </Header>
   );
 }

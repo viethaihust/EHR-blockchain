@@ -4,7 +4,7 @@ import React from "react";
 import DashboardHeader from "./components/DashboardHeader";
 import DashboardSidebar from "./components/DashboardSidebar";
 
-const { Content, Sider } = Layout;
+const { Content } = Layout;
 
 export default function DashboardLayout({
   children,

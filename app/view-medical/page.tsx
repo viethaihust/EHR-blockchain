@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useAccount, useReadContract } from "wagmi";
-import HomeHeader from "../components/HomeHeader";
 import { patientListContract } from "@/smart-contracts/ExampleAbi";
+import HomeHeader from "../components/HomeHeader";
 
 export default function ViewMedical() {
   const { address } = useAccount();
@@ -28,7 +28,7 @@ export default function ViewMedical() {
 
   return (
     <div>
-      <HomeHeader></HomeHeader>
+      <HomeHeader />
       {patientData && (
         <div className="ml-20 mt-10">
           <div className="mt-6 overflow-hidden">
