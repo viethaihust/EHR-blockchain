@@ -8,10 +8,6 @@ export default function ViewMedical() {
   const { address } = useAccount();
   const [patientData, setPatientData] = useState<any>(null);
 
-  if (!address) {
-    console.log("Error");
-    return;
-  }
   const { data: patientDetailData, isSuccess } = useReadContract({
     ...patientListContract,
     functionName: "getPatientMedicalList",
