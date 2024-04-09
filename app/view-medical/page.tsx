@@ -8,10 +8,12 @@ export default function ViewMedical() {
   const { address } = useAccount();
   const [patientData, setPatientData] = useState<any>(null);
 
+  const formattedAddress = address || `0x`;
+
   const { data: patientDetailData, isSuccess } = useReadContract({
     ...patientListContract,
     functionName: "getPatientMedicalList",
-    args: [address],
+    args: [formattedAddress],
   });
 
   useEffect(() => {
