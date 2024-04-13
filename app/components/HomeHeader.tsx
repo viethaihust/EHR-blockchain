@@ -1,16 +1,46 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Button, Dropdown, MenuProps, Space } from "antd";
 import Link from "next/link";
-import { DownOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  DownOutlined,
+  UserOutlined,
+  FolderViewOutlined,
+  EditOutlined,
+  CheckOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
 
-const items: MenuProps["items"] = [
+const patientItems: MenuProps["items"] = [
   {
     label: <Link href="view-medical">View Medical</Link>,
+    key: "1",
+    icon: <FolderViewOutlined />,
+  },
+  {
+    label: <Link href="create-edit-medical">Create/Edit Medical</Link>,
+    key: "2",
+    icon: <EditOutlined />,
+  },
+  {
+    label: <Link href="grant-access">Grant Access</Link>,
+    key: "3",
+    icon: <CheckOutlined />,
+  },
+  {
+    label: <Link href="revoke-access">Revoke Access</Link>,
+    key: "4",
+    icon: <CloseOutlined />,
+  },
+];
+
+const doctorItems: MenuProps["items"] = [
+  {
+    label: <Link href="view-medical">Search Patient</Link>,
     key: "1",
     icon: <UserOutlined />,
   },
   {
-    label: "Edit Medical?",
+    label: "Edit Medical",
     key: "2",
     icon: <UserOutlined />,
   },
@@ -48,10 +78,10 @@ export default function HomeHeader() {
           </Link>
         </div>
 
-        <Dropdown menu={{ items }} trigger={["click"]}>
+        <Dropdown menu={{ items: patientItems }} trigger={["click"]}>
           <Button>
             <Space>
-              Button
+              Patient
               <DownOutlined />
             </Space>
           </Button>

@@ -5,9 +5,9 @@ import { patientListContract } from "@/smart-contracts/ExampleAbi";
 import HomeHeader from "../components/HomeHeader";
 
 export default function ViewMedical() {
-  const { address } = useAccount();
   const [patientData, setPatientData] = useState<any>(null);
 
+  const { address } = useAccount();
   const formattedAddress = address || `0x`;
 
   const { data: patientDetailData, isSuccess } = useReadContract({
@@ -41,10 +41,18 @@ export default function ViewMedical() {
               <tbody>
                 <tr>
                   <td className="border border-emerald-500 bg-emerald-200 px-4 py-2 font-medium text-emerald-600">
+                    Name
+                  </td>
+                  <td className="border border-emerald-500 px-4 py-2 font-medium text-emerald-600">
+                    {patientData?.name}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border border-emerald-500 bg-emerald-200 px-4 py-2 font-medium text-emerald-600">
                     Weight
                   </td>
                   <td className="border border-emerald-500 px-4 py-2 font-medium text-emerald-600">
-                    {patientData?.weight.toString()}kg
+                    {patientData?.weight.toString() + " "}kg
                   </td>
                 </tr>
                 <tr>
@@ -52,7 +60,7 @@ export default function ViewMedical() {
                     Height
                   </td>
                   <td className="border border-emerald-500 px-4 py-2 font-medium text-emerald-600">
-                    {patientData?.height.toString()}cm
+                    {patientData?.height.toString() + " "}cm
                   </td>
                 </tr>
                 <tr>
@@ -65,26 +73,18 @@ export default function ViewMedical() {
                 </tr>
                 <tr>
                   <td className="border border-emerald-500 bg-emerald-200 px-4 py-2 font-medium text-emerald-600">
-                    Disease Name
+                    Blood Pressure
                   </td>
                   <td className="border border-emerald-500 px-4 py-2 font-medium text-emerald-600">
-                    {patientData?.diseaseName}
+                    {patientData?.bloodPressure.toString() + " "}
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-emerald-500 bg-emerald-200 px-4 py-2 font-medium text-emerald-600">
-                    Disease Description
+                    Covid Vaccine
                   </td>
                   <td className="border border-emerald-500 px-4 py-2 font-medium text-emerald-600">
-                    {patientData?.diseaseDescription}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-emerald-500 bg-emerald-200 px-4 py-2 font-medium text-emerald-600">
-                    Disease Started On
-                  </td>
-                  <td className="border border-emerald-500 px-4 py-2 font-medium text-emerald-600">
-                    {patientData?.diseaseStartedOn}
+                    {patientData?.covidVaccine.toString()}
                   </td>
                 </tr>
               </tbody>
