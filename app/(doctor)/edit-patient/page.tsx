@@ -1,16 +1,11 @@
-"use client";
-import {
-  type BaseError,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-  useAccount,
-} from "wagmi";
-import { Form, type FormProps, Input, Button, Checkbox } from "antd";
+"use client"
 import { patientListContract } from "@/smart-contracts/ExampleAbi";
-import { useEffect, useState } from "react";
+import { Button, Checkbox, Form, FormProps, Input } from "antd";
+import { BaseError, useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 
 type FieldType = {
-  etherAddress?: `0x${string}`;
+  doctorAddress?: `0x${string}`;
+  patientAddress?: `0x${string}`;
   name?: string;
   weight?: bigint;
   height?: bigint;
@@ -19,9 +14,7 @@ type FieldType = {
   covidVaccine?: boolean;
 };
 
-export default function EditMedicalPatientPage() {
-  // const [patientMedicalData, setPatientMedicalData] = useState<any>(null);
-
+export default function EditPatient() {
   const { address } = useAccount();
 
   const formattedAddress = address || `0x`;
@@ -29,13 +22,14 @@ export default function EditMedicalPatientPage() {
   const { data: hash, error, isPending, writeContract } = useWriteContract();
 
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
-    const { name, weight, height, bloodGroup, bloodPressure, covidVaccine } =
+    const { patientAddress, name, weight, height, bloodGroup, bloodPressure, covidVaccine } =
       values;
     writeContract({
       ...patientListContract,
-      functionName: "addEditPatientMedicalData",
+      functionName: "editPatientMedicalDataByDoctor",
       args: [
         formattedAddress,
+        patientAddress ?? `0x`,
         name ?? "",
         weight ?? BigInt(0),
         height ?? BigInt(0),
@@ -55,10 +49,8 @@ export default function EditMedicalPatientPage() {
       hash,
     });
 
-  // console.log(patientMedicalData);
-
   return (
-    <div className="p-4">
+    <div className="mt-12 p-4">
       <Form
         name="basic"
         labelCol={{ span: 8 }}
@@ -78,6 +70,14 @@ export default function EditMedicalPatientPage() {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
+        <Form.Item<FieldType>
+          label="Patient Address"
+          name="patientAddress"
+          rules={[{ required: true, message: "Please input patient address" }]}
+        >
+          <Input />
+        </Form.Item>
+
         <Form.Item<FieldType>
           label="Name"
           name="name"
@@ -119,7 +119,7 @@ export default function EditMedicalPatientPage() {
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Covid Vaccine"
+          label="Covid Vaccinated"
           name="covidVaccine"
           valuePropName="checked"
           rules={[{ required: false }]}

@@ -35,26 +35,19 @@ const patientItems: MenuProps["items"] = [
 
 const doctorItems: MenuProps["items"] = [
   {
-    label: <Link href="view-medical">Search Patient</Link>,
+    label: <Link href="search-patient">Search Patient</Link>,
     key: "1",
     icon: <UserOutlined />,
   },
   {
-    label: "Edit Medical",
+    label: <Link href="edit-patient">Edit Patient</Link>,
     key: "2",
     icon: <UserOutlined />,
   },
   {
-    label: "Grant Access",
+    label: <Link href="create-visit-history">Create Visit History</Link>,
     key: "3",
     icon: <UserOutlined />,
-    danger: true,
-  },
-  {
-    label: "Revoke Access",
-    key: "3",
-    icon: <UserOutlined />,
-    danger: true,
   },
 ];
 
@@ -86,6 +79,16 @@ export default function HomeHeader() {
             </Space>
           </Button>
         </Dropdown>
+
+        <Dropdown menu={{ items: doctorItems }} trigger={["click"]}>
+          <Button>
+            <Space>
+              Doctor
+              <DownOutlined />
+            </Space>
+          </Button>
+        </Dropdown>
+        
         <ConnectButton />
       </div>
     </div>

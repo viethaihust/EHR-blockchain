@@ -1,26 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import { useAccount, useReadContract } from "wagmi";
 import { patientListContract } from "@/smart-contracts/ExampleAbi";
-import HomeHeader from "../components/HomeHeader";
+import HomeHeader from "../../components/HomeHeader";
 
 export default function ViewMedical() {
-  const [patientData, setPatientData] = useState<any>(null);
-
   const { address } = useAccount();
   const formattedAddress = address || `0x`;
 
-  const { data: patientDetailData, isSuccess } = useReadContract({
+  const { data: patientData } = useReadContract({
     ...patientListContract,
     functionName: "getPatientMedicalList",
     args: [formattedAddress],
   });
-
-  useEffect(() => {
-    if (isSuccess) {
-      setPatientData(patientDetailData);
-    }
-  }, [isSuccess, patientDetailData]);
 
   console.log(patientData);
 
