@@ -35,18 +35,23 @@ const patientItems: MenuProps["items"] = [
 
 const doctorItems: MenuProps["items"] = [
   {
-    label: <Link href="search-patient">Search Patient</Link>,
+    label: <Link href="create-edit-doctor">Create/Edit Doctor</Link>,
     key: "1",
     icon: <UserOutlined />,
   },
   {
-    label: <Link href="edit-patient">Edit Patient</Link>,
+    label: <Link href="search-patient">Search Patient</Link>,
     key: "2",
     icon: <UserOutlined />,
   },
   {
-    label: <Link href="create-visit-history">Create Visit History</Link>,
+    label: <Link href="edit-patient">Edit Patient</Link>,
     key: "3",
+    icon: <UserOutlined />,
+  },
+  {
+    label: <Link href="create-visit-history">Create Visit History</Link>,
+    key: "4",
     icon: <UserOutlined />,
   },
 ];
@@ -54,9 +59,14 @@ const doctorItems: MenuProps["items"] = [
 export default function HomeHeader() {
   return (
     <div className="flex items-center justify-between p-4">
-      <Link href="dashboard" className="ml-6">
-        <Button>Open Dashboard</Button>
-      </Link>
+      <div>
+        <Link href="/" className="ml-6">
+          <Button>Home</Button>
+        </Link>
+        <Link href="dashboard" className="ml-6">
+          <Button>Open Dashboard</Button>
+        </Link>
+      </div>
       <div className="mr-10 flex items-center gap-6">
         <div>
           <Link href="sign-up">
@@ -88,7 +98,7 @@ export default function HomeHeader() {
             </Space>
           </Button>
         </Dropdown>
-        
+
         <ConnectButton />
       </div>
     </div>

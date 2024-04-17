@@ -1,7 +1,35 @@
 "use client";
 import { useAccount, useReadContract } from "wagmi";
 import { patientListContract } from "@/smart-contracts/ExampleAbi";
-import HomeHeader from "../../components/HomeHeader";
+import { Table } from "antd";
+
+const columns = [
+  {
+    title: 'Patient Address',
+    dataIndex: 'patientAddress',
+    key: 'patientAddress',
+  },
+  {
+    title: 'Doctor Address',
+    dataIndex: 'doctorAddress',
+    key: 'doctorAddress',
+  },
+  {
+    title: 'Date',
+    dataIndex: 'date',
+    key: 'date',
+  },
+  {
+    title: 'Diagnosis',
+    dataIndex: 'diagnosis',
+    key: 'diagnosis',
+  },
+  {
+    title: 'Prescription',
+    dataIndex: 'prescription',
+    key: 'prescription',
+  },
+];
 
 export default function ViewMedical() {
   const { address } = useAccount();
@@ -13,11 +41,17 @@ export default function ViewMedical() {
     args: [formattedAddress],
   });
 
+  const { data: visitHistory } = useReadContract({
+    ...patientListContract,
+    functionName: "getVisitHistoryList",
+    args: [formattedAddress],
+  });
+
   console.log(patientData);
+  console.log(visitHistory);
 
   return (
     <div>
-      <HomeHeader />
       {patientData && (
         <div className="ml-20 mt-10">
           <div className="mt-6 overflow-hidden">
@@ -72,7 +106,7 @@ export default function ViewMedical() {
                 </tr>
                 <tr>
                   <td className="border border-emerald-500 bg-emerald-200 px-4 py-2 font-medium text-emerald-600">
-                    Covid Vaccine
+                    Covid Vaccinated
                   </td>
                   <td className="border border-emerald-500 px-4 py-2 font-medium text-emerald-600">
                     {patientData?.covidVaccine.toString()}
@@ -81,6 +115,12 @@ export default function ViewMedical() {
               </tbody>
             </table>
           </div>
+        </div>
+      )}
+      {visitHistory && (
+        <div className="p-10">
+          <div className="font-bold mb-10">Visit List History</div>
+          <Table dataSource={visitHistory} columns={columns} />
         </div>
       )}
     </div>

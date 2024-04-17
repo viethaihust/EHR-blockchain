@@ -1,5 +1,5 @@
 export const patientListContract = {
-  address: "0xada682D3546ccC494fa1692AF4001CC671e38e38",
+  address: "0xB7125513390DE89Df85461d27e39ee159f6E29Ab",
   abi: [
     {
       inputs: [
@@ -89,7 +89,7 @@ export const patientListContract = {
     },
     {
       inputs: [
-        { internalType: "address", name: "etherAddress", type: "address" },
+        { internalType: "address", name: "patientAddress", type: "address" },
       ],
       name: "getVisitHistoryList",
       outputs: [
@@ -105,9 +105,9 @@ export const patientListContract = {
             { internalType: "string", name: "diagnosis", type: "string" },
             { internalType: "string", name: "prescription", type: "string" },
           ],
-          internalType: "struct Example.VisitHistoryData",
+          internalType: "struct Example.VisitHistoryData[]",
           name: "",
-          type: "tuple",
+          type: "tuple[]",
         },
       ],
       stateMutability: "view",

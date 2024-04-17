@@ -9,13 +9,14 @@ import { Form, type FormProps, Input, Button } from "antd";
 import { patientListContract } from "@/smart-contracts/ExampleAbi";
 
 type FieldType = {
-  patientAddress?: `0x${string}`;
-  date?: string;
-  diagnosis?: string;
-  prescription?: string;
+  etherAddress?: `0x${string}`;
+  name?: string;
+  specialty?: string;
 };
 
-export default function CreateVisitHistory() {
+export default function CreateEditDoctor() {
+  // const [patientMedicalData, setPatientMedicalData] = useState<any>(null);
+
   const { address } = useAccount();
 
   const formattedAddress = address || `0x`;
@@ -23,17 +24,15 @@ export default function CreateVisitHistory() {
   const { data: hash, error, isPending, writeContract } = useWriteContract();
 
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
-    const { patientAddress, date, diagnosis, prescription } =
+    const { name, specialty } =
       values;
     writeContract({
       ...patientListContract,
-      functionName: "addVisitHistory",
+      functionName: "addEditDoctorData",
       args: [
-        patientAddress ?? `0x`,
         formattedAddress,
-        date ?? "",
-        diagnosis ?? "",
-        prescription ?? "",
+        name ?? "",
+        specialty ?? "",
       ],
     });
   };
@@ -71,33 +70,17 @@ export default function CreateVisitHistory() {
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          label="Patient Address"
-          name="patientAddress"
-          rules={[{ required: true, message: "Please input patient address" }]}
+          label="Name"
+          name="name"
+          rules={[{ required: true, message: "Please input name" }]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Date"
-          name="date"
-          rules={[{ required: true, message: "Please input date" }]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item<FieldType>
-          label="Diagnosis"
-          name="diagnosis"
-          rules={[{ required: true, message: "Please input diagnosis" }]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item<FieldType>
-          label="Prescription"
-          name="prescription"
-          rules={[{ required: true, message: "Please input prescription" }]}
+          label="Specialty"
+          name="specialty"
+          rules={[{ required: true, message: "Please input specialty" }]}
         >
           <Input />
         </Form.Item>
