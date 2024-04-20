@@ -10,7 +10,7 @@ const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
       <body>
         <Provider>
           <AntdRegistry>
-            <div className="h-screen flex flex-col">
+            <div className="min-h-screen flex flex-col">
               <HomeHeader />
               {children}
             </div>

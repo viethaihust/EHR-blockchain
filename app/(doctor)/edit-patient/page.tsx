@@ -1,7 +1,14 @@
-"use client"
+"use client";
+import { useTransactionToast } from "@/app/components/useTransactionToast";
 import { patientListContract } from "@/smart-contracts/ExampleAbi";
 import { Button, Checkbox, Form, FormProps, Input } from "antd";
-import { BaseError, useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import Link from "next/link";
+import {
+  BaseError,
+  useAccount,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 
 type FieldType = {
   doctorAddress?: `0x${string}`;
@@ -22,8 +29,15 @@ export default function EditPatient() {
   const { data: hash, error, isPending, writeContract } = useWriteContract();
 
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
-    const { patientAddress, name, weight, height, bloodGroup, bloodPressure, covidVaccine } =
-      values;
+    const {
+      patientAddress,
+      name,
+      weight,
+      height,
+      bloodGroup,
+      bloodPressure,
+      covidVaccine,
+    } = values;
     writeContract({
       ...patientListContract,
       functionName: "editPatientMedicalDataByDoctor",
@@ -48,6 +62,13 @@ export default function EditPatient() {
     useWaitForTransactionReceipt({
       hash,
     });
+
+  useTransactionToast(
+    isConfirming,
+    isConfirmed,
+    "Edit patient successfully.",
+    error,
+  );
 
   return (
     <div className="mt-12 p-4">
@@ -134,11 +155,16 @@ export default function EditPatient() {
         </Form.Item>
       </Form>
 
-      {hash && <div>Transaction Hash: {hash}</div>}
-      {isConfirming && <div>Waiting for confirmation...</div>}
-      {isConfirmed && <div>Transaction confirmed.</div>}
-      {error && (
-        <div>Error: {(error as BaseError).shortMessage || error.message}</div>
+      {hash && isConfirmed && (
+        <div className="ml-10">
+          Click to see transaction:{" "}
+          <Link
+            href={"https://sepolia-optimism.etherscan.io/tx/" + hash}
+            className=""
+          >
+            {"https://sepolia-optimism.etherscan.io/tx/" + hash}
+          </Link>
+        </div>
       )}
     </div>
   );

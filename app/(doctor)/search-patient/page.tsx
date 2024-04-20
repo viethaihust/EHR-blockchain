@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useReadContract } from "wagmi";
 import { patientListContract } from "@/smart-contracts/ExampleAbi";
-import { Button, Form, FormProps, Input } from "antd";
+import { Button, Form, FormProps, Input, Spin } from "antd";
 
 type FieldType = {
   etherAddress?: `0x${string}`;
@@ -21,8 +21,6 @@ export default function SearchPatient() {
     functionName: "getPatientMedicalList",
     args: [patientAddress ?? `0x`],
   });
-
-  console.log(patientData);
 
   return (
     <div className="mt-12 p-4">

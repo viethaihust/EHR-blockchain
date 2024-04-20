@@ -7,6 +7,8 @@ import {
 } from "wagmi";
 import { Form, type FormProps, Input, Button } from "antd";
 import { patientListContract } from "@/smart-contracts/ExampleAbi";
+import { useTransactionToast } from "@/app/components/useTransactionToast";
+import Link from "next/link";
 
 type FieldType = {
   patientAddress?: `0x${string}`;
@@ -23,8 +25,7 @@ export default function CreateVisitHistory() {
   const { data: hash, error, isPending, writeContract } = useWriteContract();
 
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
-    const { patientAddress, date, diagnosis, prescription } =
-      values;
+    const { patientAddress, date, diagnosis, prescription } = values;
     writeContract({
       ...patientListContract,
       functionName: "addVisitHistory",
@@ -47,10 +48,15 @@ export default function CreateVisitHistory() {
       hash,
     });
 
-  // console.log(patientMedicalData);
+  useTransactionToast(
+    isConfirming,
+    isConfirmed,
+    "Create visit history successfully.",
+    error,
+  );
 
   return (
-    <div className="p-4 mt-12">
+    <div className="mt-12 p-4">
       <Form
         name="basic"
         labelCol={{ span: 8 }}
@@ -109,11 +115,16 @@ export default function CreateVisitHistory() {
         </Form.Item>
       </Form>
 
-      {hash && <div>Transaction Hash: {hash}</div>}
-      {isConfirming && <div>Waiting for confirmation...</div>}
-      {isConfirmed && <div>Transaction confirmed.</div>}
-      {error && (
-        <div>Error: {(error as BaseError).shortMessage || error.message}</div>
+      {hash && isConfirmed && (
+        <div className="ml-10">
+          Click to see transaction:{" "}
+          <Link
+            href={"https://sepolia-optimism.etherscan.io/tx/" + hash}
+            className=""
+          >
+            {"https://sepolia-optimism.etherscan.io/tx/" + hash}
+          </Link>
+        </div>
       )}
     </div>
   );

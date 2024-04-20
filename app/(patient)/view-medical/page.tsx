@@ -1,33 +1,33 @@
 "use client";
 import { useAccount, useReadContract } from "wagmi";
 import { patientListContract } from "@/smart-contracts/ExampleAbi";
-import { Table } from "antd";
+import { Spin, Table } from "antd";
 
 const columns = [
   {
-    title: 'Patient Address',
-    dataIndex: 'patientAddress',
-    key: 'patientAddress',
+    title: "Patient Address",
+    dataIndex: "patientAddress",
+    key: "patientAddress",
   },
   {
-    title: 'Doctor Address',
-    dataIndex: 'doctorAddress',
-    key: 'doctorAddress',
+    title: "Doctor Address",
+    dataIndex: "doctorAddress",
+    key: "doctorAddress",
   },
   {
-    title: 'Date',
-    dataIndex: 'date',
-    key: 'date',
+    title: "Date",
+    dataIndex: "date",
+    key: "date",
   },
   {
-    title: 'Diagnosis',
-    dataIndex: 'diagnosis',
-    key: 'diagnosis',
+    title: "Diagnosis",
+    dataIndex: "diagnosis",
+    key: "diagnosis",
   },
   {
-    title: 'Prescription',
-    dataIndex: 'prescription',
-    key: 'prescription',
+    title: "Prescription",
+    dataIndex: "prescription",
+    key: "prescription",
   },
 ];
 
@@ -52,17 +52,11 @@ export default function ViewMedical() {
 
   return (
     <div>
-      {patientData && (
-        <div className="ml-20 mt-10">
-          <div className="mt-6 overflow-hidden">
+      <div className="px-20 py-10">
+        <div className="overflow-hidden">
+          <div className="mb-6 text-xl font-bold">Medical Details</div>
+          {patientData ? (
             <table className="table-auto">
-              <thead>
-                <tr>
-                  <th className="text-left text-xl leading-relaxed">
-                    Medical Details
-                  </th>
-                </tr>
-              </thead>
               <tbody>
                 <tr>
                   <td className="border border-emerald-500 bg-emerald-200 px-4 py-2 font-medium text-emerald-600">
@@ -114,15 +108,23 @@ export default function ViewMedical() {
                 </tr>
               </tbody>
             </table>
-          </div>
+          ) : (
+            <div>
+              <Spin />
+            </div>
+          )}
+          {visitHistory && (
+            <div className="mt-10">
+              <div className="mb-6 text-xl font-bold">Visit List History</div>
+              <Table
+                dataSource={visitHistory}
+                columns={columns}
+                rowKey={record => record.date}
+              />
+            </div>
+          )}
         </div>
-      )}
-      {visitHistory && (
-        <div className="p-10">
-          <div className="font-bold mb-10">Visit List History</div>
-          <Table dataSource={visitHistory} columns={columns} />
-        </div>
-      )}
+      </div>
     </div>
   );
 }

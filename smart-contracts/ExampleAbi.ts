@@ -1,5 +1,5 @@
 export const patientListContract = {
-  address: "0xB7125513390DE89Df85461d27e39ee159f6E29Ab",
+  address: "0x2253ff4851E890E85b9FdFb9c986C2Ff34a87807",
   abi: [
     {
       inputs: [

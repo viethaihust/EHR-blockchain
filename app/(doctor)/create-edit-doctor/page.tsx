@@ -1,12 +1,13 @@
 "use client";
 import {
-  type BaseError,
   useWaitForTransactionReceipt,
   useWriteContract,
   useAccount,
 } from "wagmi";
 import { Form, type FormProps, Input, Button } from "antd";
 import { patientListContract } from "@/smart-contracts/ExampleAbi";
+import { useTransactionToast } from "@/app/components/useTransactionToast";
+import Link from "next/link";
 
 type FieldType = {
   etherAddress?: `0x${string}`;
@@ -15,8 +16,6 @@ type FieldType = {
 };
 
 export default function CreateEditDoctor() {
-  // const [patientMedicalData, setPatientMedicalData] = useState<any>(null);
-
   const { address } = useAccount();
 
   const formattedAddress = address || `0x`;
@@ -24,16 +23,11 @@ export default function CreateEditDoctor() {
   const { data: hash, error, isPending, writeContract } = useWriteContract();
 
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
-    const { name, specialty } =
-      values;
+    const { name, specialty } = values;
     writeContract({
       ...patientListContract,
       functionName: "addEditDoctorData",
-      args: [
-        formattedAddress,
-        name ?? "",
-        specialty ?? "",
-      ],
+      args: [formattedAddress, name ?? "", specialty ?? ""],
     });
   };
 
@@ -46,10 +40,15 @@ export default function CreateEditDoctor() {
       hash,
     });
 
-  // console.log(patientMedicalData);
+  useTransactionToast(
+    isConfirming,
+    isConfirmed,
+    "Create/Edit doctor successfully.",
+    error,
+  );
 
   return (
-    <div className="p-4 mt-12">
+    <div className="mt-12 p-4">
       <Form
         name="basic"
         labelCol={{ span: 8 }}
@@ -92,11 +91,16 @@ export default function CreateEditDoctor() {
         </Form.Item>
       </Form>
 
-      {hash && <div>Transaction Hash: {hash}</div>}
-      {isConfirming && <div>Waiting for confirmation...</div>}
-      {isConfirmed && <div>Transaction confirmed.</div>}
-      {error && (
-        <div>Error: {(error as BaseError).shortMessage || error.message}</div>
+      {hash && isConfirmed && (
+        <div className="ml-10">
+          Click to see transaction:{" "}
+          <Link
+            href={"https://sepolia-optimism.etherscan.io/tx/" + hash}
+            className=""
+          >
+            {"https://sepolia-optimism.etherscan.io/tx/" + hash}
+          </Link>
+        </div>
       )}
     </div>
   );

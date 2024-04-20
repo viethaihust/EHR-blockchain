@@ -1,7 +1,13 @@
 "use client";
+import { useTransactionToast } from "@/app/components/useTransactionToast";
 import { patientListContract } from "@/smart-contracts/ExampleAbi";
 import { Button, Form, FormProps, Input } from "antd";
-import { BaseError, useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import Link from "next/link";
+import {
+  useAccount,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 
 type FieldType = {
   etherAddress?: `0x${string}`;
@@ -31,6 +37,13 @@ export default function GrantAccess() {
     useWaitForTransactionReceipt({
       hash,
     });
+
+  useTransactionToast(
+    isConfirming,
+    isConfirmed,
+    "Grant access successfully.",
+    error,
+  );
 
   return (
     <div className="mt-12 p-4">
@@ -63,11 +76,16 @@ export default function GrantAccess() {
         </Form.Item>
       </Form>
 
-      {hash && <div>Transaction Hash: {hash}</div>}
-      {isConfirming && <div>Waiting for confirmation...</div>}
-      {isConfirmed && <div>Transaction confirmed.</div>}
-      {error && (
-        <div>Error: {(error as BaseError).shortMessage || error.message}</div>
+      {hash && isConfirmed && (
+        <div className="ml-10">
+          Click to see transaction:{" "}
+          <Link
+            href={"https://sepolia-optimism.etherscan.io/tx/" + hash}
+            className=""
+          >
+            {"https://sepolia-optimism.etherscan.io/tx/" + hash}
+          </Link>
+        </div>
       )}
     </div>
   );
