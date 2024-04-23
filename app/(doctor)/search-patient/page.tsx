@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useReadContract } from "wagmi";
-import { patientListContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
 import { Button, Form, FormProps, Input, Spin } from "antd";
 
 type FieldType = {
@@ -17,7 +17,7 @@ export default function SearchPatient() {
   };
 
   const { data: patientData, refetch: refetchPatient } = useReadContract({
-    ...patientListContract,
+    ...medicalRecordContract,
     functionName: "getPatientMedicalList",
     args: [patientAddress ?? `0x`],
   });

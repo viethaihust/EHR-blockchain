@@ -1,6 +1,6 @@
 "use client";
 import { useAccount, useReadContract } from "wagmi";
-import { patientListContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
 import { Spin, Table } from "antd";
 
 const columns = [
@@ -36,14 +36,14 @@ export default function ViewMedical() {
   const formattedAddress = address || `0x`;
 
   const { data: patientData } = useReadContract({
-    ...patientListContract,
-    functionName: "getPatientMedicalList",
+    ...medicalRecordContract,
+    functionName: "getPatient",
     args: [formattedAddress],
   });
 
   const { data: visitHistory } = useReadContract({
-    ...patientListContract,
-    functionName: "getVisitHistoryList",
+    ...medicalRecordContract,
+    functionName: "getVisitHistoriesByPatient",
     args: [formattedAddress],
   });
 

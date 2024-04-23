@@ -5,7 +5,7 @@ import {
   useAccount,
 } from "wagmi";
 import { Form, type FormProps, Input, Button } from "antd";
-import { patientListContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
 import { useTransactionToast } from "@/app/components/useTransactionToast";
 import Link from "next/link";
 
@@ -25,7 +25,7 @@ export default function CreateEditDoctor() {
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
     const { name, specialty } = values;
     writeContract({
-      ...patientListContract,
+      ...medicalRecordContract,
       functionName: "addEditDoctorData",
       args: [formattedAddress, name ?? "", specialty ?? ""],
     });

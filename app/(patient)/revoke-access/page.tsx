@@ -1,6 +1,6 @@
 "use client";
 import { useTransactionToast } from "@/app/components/useTransactionToast";
-import { patientListContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
 import { Button, Form, FormProps, Input } from "antd";
 import Link from "next/link";
 import {
@@ -23,7 +23,7 @@ export default function RevokeAccess() {
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
     const { etherAddress } = values;
     writeContract({
-      ...patientListContract,
+      ...medicalRecordContract,
       functionName: "revokePermission",
       args: [formattedAddress, etherAddress ?? `0x`],
     });
@@ -44,7 +44,7 @@ export default function RevokeAccess() {
     "Revoke access successfully.",
     error,
   );
-  
+
   return (
     <div className="mt-12 p-4">
       <Form

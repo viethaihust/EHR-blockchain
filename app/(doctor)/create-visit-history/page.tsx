@@ -6,7 +6,7 @@ import {
   useAccount,
 } from "wagmi";
 import { Form, type FormProps, Input, Button } from "antd";
-import { patientListContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
 import { useTransactionToast } from "@/app/components/useTransactionToast";
 import Link from "next/link";
 
@@ -27,7 +27,7 @@ export default function CreateVisitHistory() {
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
     const { patientAddress, date, diagnosis, prescription } = values;
     writeContract({
-      ...patientListContract,
+      ...medicalRecordContract,
       functionName: "addVisitHistory",
       args: [
         patientAddress ?? `0x`,

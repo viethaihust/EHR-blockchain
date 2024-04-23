@@ -1,31 +1,31 @@
 "use client";
-import { useTransactionToast } from "@/app/components/useTransactionToast";
-import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
-import { Button, Form, FormProps, Input } from "antd";
-import Link from "next/link";
 import {
   useAccount,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
+import { Form, type FormProps, Input, Button } from "antd";
+import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
+import Link from "next/link";
+import { useTransactionToast } from "@/app/components/useTransactionToast";
 
 type FieldType = {
-  etherAddress?: `0x${string}`;
+  name?: string;
+  specialty?: string;
 };
 
-export default function GrantAccess() {
+export default function RegisterPage() {
   const { address } = useAccount();
-
-  const formattedAddress = address || `0x`;
 
   const { data: hash, error, isPending, writeContract } = useWriteContract();
 
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
-    const { etherAddress } = values;
+    const { name, specialty } = values;
     writeContract({
       ...medicalRecordContract,
-      functionName: "givePermission",
-      args: [formattedAddress, etherAddress ?? `0x`],
+      functionName: "register",
+      args: [name ?? "", specialty ?? ""],
+      account: address,
     });
   };
 
@@ -41,7 +41,7 @@ export default function GrantAccess() {
   useTransactionToast(
     isConfirming,
     isConfirmed,
-    "Grant access successfully.",
+    "Register successfully.",
     error,
   );
 
@@ -57,14 +57,17 @@ export default function GrantAccess() {
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          label="Doctor's ethereum address"
-          name="etherAddress"
-          rules={[
-            {
-              required: true,
-              message: "Please input doctor's ethereum address",
-            },
-          ]}
+          label="Name"
+          name="name"
+          rules={[{ required: true, message: "Please input your name" }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item<FieldType>
+          label="Specialty"
+          name="specialty"
+          rules={[{ required: true, message: "Please input your specialty" }]}
         >
           <Input />
         </Form.Item>

@@ -1,6 +1,6 @@
 "use client";
 import { useTransactionToast } from "@/app/components/useTransactionToast";
-import { patientListContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
 import { Button, Checkbox, Form, FormProps, Input } from "antd";
 import Link from "next/link";
 import {
@@ -39,7 +39,7 @@ export default function EditPatient() {
       covidVaccine,
     } = values;
     writeContract({
-      ...patientListContract,
+      ...medicalRecordContract,
       functionName: "editPatientMedicalDataByDoctor",
       args: [
         formattedAddress,

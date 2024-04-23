@@ -6,7 +6,7 @@ import {
   useReadContract,
 } from "wagmi";
 import { Form, type FormProps, Input, Button, Checkbox } from "antd";
-import { patientListContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
 import Link from "next/link";
 import { useTransactionToast } from "@/app/components/useTransactionToast";
 
@@ -26,7 +26,7 @@ export default function EditMedicalPatientPage() {
   const formattedAddress = address || `0x`;
 
   const { data: patientData } = useReadContract({
-    ...patientListContract,
+    ...medicalRecordContract,
     functionName: "getPatientMedicalList",
     args: [formattedAddress],
   });
@@ -37,7 +37,7 @@ export default function EditMedicalPatientPage() {
     const { name, weight, height, bloodGroup, bloodPressure, covidVaccine } =
       values;
     writeContract({
-      ...patientListContract,
+      ...medicalRecordContract,
       functionName: "addEditPatientMedicalData",
       args: [
         formattedAddress,

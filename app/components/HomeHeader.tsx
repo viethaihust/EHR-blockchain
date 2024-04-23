@@ -63,25 +63,20 @@ export default function HomeHeader() {
         <Link href="/" className="ml-6">
           <Button>Home</Button>
         </Link>
-        <Link href="dashboard" className="ml-6">
+        <Link href="/dashboard" className="ml-6">
           <Button>Open Dashboard</Button>
         </Link>
       </div>
       <div className="mr-10 flex items-center gap-6">
         <div>
-          <Link href="sign-up">
+          <Link href="/login">
             <button className="border border-gray-400 bg-gray-100 px-4 py-1 font-semibold text-black transition-colors duration-300 hover:bg-gray-200">
-              Sign Up
-            </button>
-          </Link>
-          <Link href="sign-in">
-            <button className="px-4 py-1 font-semibold text-black transition-colors duration-300 hover:text-gray-500">
-              Sign In
+              Login
             </button>
           </Link>
         </div>
 
-        <Dropdown menu={{ items: patientItems }} trigger={["click"]}>
+        {/* <Dropdown menu={{ items: patientItems }} trigger={["click"]}>
           <Button>
             <Space>
               Patient
@@ -97,7 +92,7 @@ export default function HomeHeader() {
               <DownOutlined />
             </Space>
           </Button>
-        </Dropdown>
+        </Dropdown> */}
 
         <ConnectButton />
       </div>
