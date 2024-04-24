@@ -63,7 +63,7 @@ export default function HomeHeader() {
         <Link href="/" className="ml-6">
           <Button>Home</Button>
         </Link>
-        <Link href="/dashboard" className="ml-6">
+        <Link href="/dashboard/doctor" className="ml-6">
           <Button>Open Dashboard</Button>
         </Link>
       </div>

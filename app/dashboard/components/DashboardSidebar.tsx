@@ -12,11 +12,6 @@ const { Sider } = Layout;
 
 const sideItems: MenuProps["items"] = [
   {
-    key: "/dashboard/hospital",
-    label: <Link href="/dashboard/hospital">Hospital</Link>,
-    icon: <BankOutlined />,
-  },
-  {
     key: "/dashboard/doctor",
     label: <Link href="/dashboard/doctor">Doctor</Link>,
     icon: <SolutionOutlined />,

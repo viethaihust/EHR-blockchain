@@ -17,13 +17,11 @@ export default function ConnectWalletPage() {
   useEffect(() => {
     if (address && userStatus === "admin") {
       redirect("/dashboard");
-
-    }else if (address && userStatus === "unregistered") {
-        redirect("/register"); 
-    }
-    else if (address && userStatus === "unapproved") {
+    } else if (address && userStatus === "unregistered") {
+      redirect("/register");
+    } else if (address && userStatus === "unapproved") {
       redirect("/unapproved");
-    } else if (address && userStatus === "doctor") {
+    } else if (address && userStatus === "approved") {
       redirect("/doctor");
     }
   }, [address, userStatus]);
