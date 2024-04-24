@@ -83,7 +83,7 @@ export default function DetailsDoctorPage({
             <Row gutter={16}>
               <Col className="gutter-row" span={10}>
                 <div style={style}>
-                  Doctor's ether address: {doctorDetail.etherAddress}
+                  Doctor&apos;s ether address: {doctorDetail.etherAddress}
                 </div>
                 <div style={style}>Name: {doctorDetail.name}</div>
               </Col>

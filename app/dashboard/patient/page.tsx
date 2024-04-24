@@ -1,9 +1,8 @@
-"use client";
-import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
+"use client"
 import { Button, Table } from "antd";
 import Link from "next/link";
-import { useReadContract } from "wagmi";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import useGetPatients from "@/app/components/useGetPatients";
 
 const columns = [
   {
@@ -55,7 +54,7 @@ const columns = [
     render: (_: any, record: any) => (
       <span>
         <Link href={`patient/details/${record.patientId}`}>
-          <Button type="default" size="small" style={{ marginLeft: 16 }}>
+          <Button type="default" size="small">
             Details
           </Button>
         </Link>
@@ -65,42 +64,13 @@ const columns = [
 ];
 
 export default function DashboardPatientPage() {
-  const { data: patientLength } = useReadContract({
-    ...medicalRecordContract,
-    functionName: "getPatientsLength",
-  });
-
-  const { data: patients } = useReadContract({
-    ...medicalRecordContract,
-    functionName: "getPatients",
-    args: [BigInt(0), patientLength ? patientLength - BigInt(1) : BigInt(0)],
-  });
-
-  const transformedArray = [];
-  if (patients) {
-    const length = patients[1].length;
-
-    for (let i = 0; i < length; i++) {
-      const newObj = {
-        patientId: patients[1][i],
-        name: patients[2][i],
-        weight: patients[3][i].toString(),
-        height: patients[4][i].toString(),
-        bloodGroup: patients[5][i],
-        bloodPressure: patients[6][i].toString(),
-        covidVaccinated: patients[7][i],
-      };
-      transformedArray.push(newObj);
-    }
-
-    console.log(transformedArray);
-  }
+  const dataSource = useGetPatients();
 
   return (
     <div className="p-4">
-      {transformedArray && (
+      {dataSource && (
         <Table
-          dataSource={transformedArray}
+          dataSource={dataSource}
           columns={columns}
           rowKey={record => record.patientId}
         />

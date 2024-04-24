@@ -33,7 +33,9 @@ const columns = [
       <span>
         {isApproved ? (
           <CheckCircleOutlined style={{ fontSize: "20px", color: "green" }} />
-        ) : <CloseCircleOutlined style={{ fontSize: "20px", color: "red" }} />}
+        ) : (
+          <CloseCircleOutlined style={{ fontSize: "20px", color: "red" }} />
+        )}
       </span>
     ),
   },
@@ -44,7 +46,7 @@ const columns = [
     render: (_: any, record: any) => (
       <span>
         <Link href={`doctor/details/${record.etherAddress}`}>
-          <Button type="default" size="small" style={{ marginLeft: 16 }}>
+          <Button type="default" size="small">
             Details
           </Button>
         </Link>

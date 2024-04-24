@@ -12,7 +12,7 @@ type FieldType = {
   specialty?: string;
 };
 
-export default function CreateEditDoctor() {
+export default function CreateDoctorPage() {
   const { data: hash, error, isPending, writeContract } = useWriteContract();
 
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
@@ -55,7 +55,10 @@ export default function CreateEditDoctor() {
           label="Ether Address"
           name="etherAddress"
           rules={[
-            { required: true, message: "Please input doctor's etherAddress" },
+            {
+              required: true,
+              message: "Please input doctor&apos;s etherAddress",
+            },
           ]}
         >
           <Input />
@@ -64,7 +67,9 @@ export default function CreateEditDoctor() {
         <Form.Item<FieldType>
           label="Name"
           name="name"
-          rules={[{ required: true, message: "Please input doctor's name" }]}
+          rules={[
+            { required: true, message: "Please input doctor&apos;s name" },
+          ]}
         >
           <Input />
         </Form.Item>
@@ -73,7 +78,7 @@ export default function CreateEditDoctor() {
           label="Specialty"
           name="specialty"
           rules={[
-            { required: true, message: "Please input doctor's specialty" },
+            { required: true, message: "Please input doctor&apos;s specialty" },
           ]}
         >
           <Input />

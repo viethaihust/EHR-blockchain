@@ -1,40 +1,46 @@
 "use client";
-import {
-  useReadContract,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from "wagmi";
-import { Form, type FormProps, Input, Button, Spin } from "antd";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { Form, type FormProps, Input, Button, Spin, Checkbox } from "antd";
 import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
 import { useTransactionToast } from "@/app/components/useTransactionToast";
 import Link from "next/link";
 import { LoadingOutlined } from "@ant-design/icons";
 
 type FieldType = {
-  etherAddress?: `0x${string}`;
+  patientId?: string;
   name?: string;
-  specialty?: string;
+  weight?: bigint;
+  height?: bigint;
+  bloodGroup?: string;
+  bloodPressure?: bigint;
+  covidVaccinated?: boolean;
 };
 
-export default function EditDoctorPage({
-  params,
-}: {
-  params: { id: `0x${string}` };
-}) {
-  const { data: doctorDetail } = useReadContract({
-    ...medicalRecordContract,
-    functionName: "getDoctor",
-    args: [params.id],
-  });
-
+export default function CreatePatientPage() {
   const { data: hash, error, isPending, writeContract } = useWriteContract();
 
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
-    const { etherAddress, name, specialty } = values;
+    const {
+      patientId,
+      name,
+      weight,
+      height,
+      bloodGroup,
+      bloodPressure,
+      covidVaccinated,
+    } = values;
     writeContract({
       ...medicalRecordContract,
-      functionName: "addEditDoctorData",
-      args: [etherAddress ?? `0x`, name ?? "", specialty ?? ""],
+      functionName: "addEditPatient",
+      args: [
+        patientId ?? "",
+        name ?? "",
+        weight ?? BigInt(0),
+        height ?? BigInt(0),
+        bloodGroup ?? "",
+        bloodPressure ?? BigInt(0),
+        covidVaccinated ?? false,
+      ],
     });
   };
 
@@ -50,7 +56,7 @@ export default function EditDoctorPage({
   useTransactionToast(
     isConfirming,
     isConfirmed,
-    "Edit doctor successfully.",
+    "Create patient successfully.",
     error,
   );
 
@@ -61,49 +67,83 @@ export default function EditDoctorPage({
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
-        initialValues={{
-          etherAddress: doctorDetail?.etherAddress,
-          name: doctorDetail?.name,
-          specialty: doctorDetail?.specialty,
-          remember: true,
-        }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          label="Ether Address"
-          name="etherAddress"
+          label="Patient Id"
+          name="patientId"
           rules={[
-            {
-              required: true,
-              message: "Please input doctor&apos;s etherAddress",
-            },
+            { required: true, message: "Please input patient&apos;s id" },
           ]}
         >
-          <Input disabled />
+          <Input />
         </Form.Item>
 
         <Form.Item<FieldType>
           label="Name"
           name="name"
           rules={[
-            { required: true, message: "Please input doctor&apos;s name" },
+            { required: true, message: "Please input patient&apos;s name" },
           ]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Specialty"
-          name="specialty"
+          label="Weight"
+          name="weight"
           rules={[
-            { required: true, message: "Please input doctor&apos;s specialty" },
+            { required: true, message: "Please input patient&apos;s weight" },
           ]}
         >
           <Input />
         </Form.Item>
 
+        <Form.Item<FieldType>
+          label="Height"
+          name="height"
+          rules={[
+            { required: true, message: "Please input patient&apos;s height" },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item<FieldType>
+          label="Blood Group"
+          name="bloodGroup"
+          rules={[
+            {
+              required: true,
+              message: "Please input patient&apos;s blood group",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item<FieldType>
+          label="Blood Pressure"
+          name="bloodPressure"
+          rules={[
+            {
+              required: true,
+              message: "Please input patient&apos;s blood pressure",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item<FieldType>
+          label="Covid Vaccinated"
+          name="covidVaccinated"
+          valuePropName="checked"
+        >
+          <Checkbox />
+        </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button
             type="primary"
@@ -132,10 +172,7 @@ export default function EditDoctorPage({
       {hash && isConfirmed && (
         <div className="ml-10">
           Click to see transaction:{" "}
-          <Link
-            href={"https://sepolia-optimism.etherscan.io/tx/" + hash}
-            className=""
-          >
+          <Link href={"https://sepolia-optimism.etherscan.io/tx/" + hash}>
             {"https://sepolia-optimism.etherscan.io/tx/" + hash}
           </Link>
         </div>
