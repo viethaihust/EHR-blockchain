@@ -1,13 +1,14 @@
 "use client";
 import {
+  useReadContract,
   useWaitForTransactionReceipt,
   useWriteContract,
-  useAccount,
 } from "wagmi";
-import { Form, type FormProps, Input, Button } from "antd";
+import { Form, type FormProps, Input, Button, Spin } from "antd";
 import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
 import { useTransactionToast } from "@/app/components/useTransactionToast";
 import Link from "next/link";
+import { LoadingOutlined } from "@ant-design/icons";
 
 type FieldType = {
   etherAddress?: `0x${string}`;
@@ -15,19 +16,25 @@ type FieldType = {
   specialty?: string;
 };
 
-export default function CreateEditDoctor() {
-  const { address } = useAccount();
-
-  const formattedAddress = address || `0x`;
+export default function CreateEditDoctor({
+  params,
+}: {
+  params: { id: `0x${string}` };
+}) {
+  const { data: doctorDetail } = useReadContract({
+    ...medicalRecordContract,
+    functionName: "getDoctor",
+    args: [params.id],
+  });
 
   const { data: hash, error, isPending, writeContract } = useWriteContract();
 
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
-    const { name, specialty } = values;
+    const { etherAddress, name, specialty } = values;
     writeContract({
       ...medicalRecordContract,
       functionName: "addEditDoctorData",
-      args: [formattedAddress, name ?? "", specialty ?? ""],
+      args: [etherAddress ?? `0x`, name ?? "", specialty ?? ""],
     });
   };
 
@@ -43,7 +50,7 @@ export default function CreateEditDoctor() {
   useTransactionToast(
     isConfirming,
     isConfirmed,
-    "Create/Edit doctor successfully.",
+    "Edit doctor successfully.",
     error,
   );
 
@@ -54,24 +61,30 @@ export default function CreateEditDoctor() {
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
-        // initialValues={{
-        //   id: patientMedicalData.id,
-        //   weight: patientMedicalData?.weight,
-        //   height: patientMedicalData?.height,
-        //   bloodGroup: patientMedicalData?.bloodGroup,
-        //   diseaseName: patientMedicalData?.diseaseName,
-        //   diseaseDescription: patientMedicalData?.diseaseDescription,
-        //   diseaseStartedOn: patientMedicalData?.diseaseStartedOn,
-        //   remember: true,
-        // }}
+        initialValues={{
+          etherAddress: doctorDetail?.etherAddress,
+          name: doctorDetail?.name,
+          specialty: doctorDetail?.specialty,
+          remember: true,
+        }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item<FieldType>
+          label="Ether Address"
+          name="etherAddress"
+          rules={[
+            { required: true, message: "Please input doctor's etherAddress" },
+          ]}
+        >
+          <Input disabled />
+        </Form.Item>
+
+        <Form.Item<FieldType>
           label="Name"
           name="name"
-          rules={[{ required: true, message: "Please input name" }]}
+          rules={[{ required: true, message: "Please input doctor's name" }]}
         >
           <Input />
         </Form.Item>
@@ -79,14 +92,34 @@ export default function CreateEditDoctor() {
         <Form.Item<FieldType>
           label="Specialty"
           name="specialty"
-          rules={[{ required: true, message: "Please input specialty" }]}
+          rules={[
+            { required: true, message: "Please input doctor's specialty" },
+          ]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit" disabled={isPending}>
-            {isPending ? "Confirming..." : "Submit"}
+        <Button
+            type="primary"
+            htmlType="submit"
+            disabled={isPending}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            {isConfirming ? (
+              <Spin
+                indicator={
+                  <LoadingOutlined
+                    style={{ fontSize: 16, color: "white" }}
+                    spin
+                  />
+                }
+              />
+            ) : isPending ? (
+              "Confirming..."
+            ) : (
+              "Submit"
+            )}
           </Button>
         </Form.Item>
       </Form>
