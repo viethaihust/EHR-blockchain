@@ -1,5 +1,5 @@
 "use client";
-import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
 import { Col, Divider, Row, Spin, Table } from "antd";
 import { useReadContract } from "wagmi";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
@@ -94,7 +94,9 @@ export default function DetailsPatientPage({
           </div>
         )}
 
-        <Divider orientation="left" style={{ marginTop: 50 }}>Visit History</Divider>
+        <Divider orientation="left" style={{ marginTop: 50 }}>
+          Visit History
+        </Divider>
         {visitHistory && (
           <div>
             <Table

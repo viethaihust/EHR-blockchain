@@ -1,4 +1,4 @@
-import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
 import { useReadContract } from "wagmi";
 
 const useGetPatients = () => {

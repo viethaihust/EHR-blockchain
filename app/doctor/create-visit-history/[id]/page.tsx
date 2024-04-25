@@ -1,6 +1,6 @@
 "use client";
 import {
-  useReadContract,
+  useAccount,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
@@ -11,30 +11,27 @@ import Link from "next/link";
 import { LoadingOutlined } from "@ant-design/icons";
 
 type FieldType = {
-  etherAddress?: `0x${string}`;
-  name?: string;
-  specialty?: string;
+  patientId?: string;
+  date?: string;
+  diagnosis?: string;
+  prescription?: string;
 };
 
-export default function EditDoctorPage({
+export default function CreateVisitHistoryPage({
   params,
 }: {
-  params: { id: `0x${string}` };
+  params: { id: string };
 }) {
-  const { data: doctorDetail } = useReadContract({
-    ...medicalRecordContract,
-    functionName: "getDoctor",
-    args: [params.id],
-  });
-
+  const { address } = useAccount();
   const { data: hash, error, isPending, writeContract } = useWriteContract();
 
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
-    const { etherAddress, name, specialty } = values;
+    const { patientId, date, diagnosis, prescription } = values;
     writeContract({
       ...medicalRecordContract,
-      functionName: "addEditDoctorData",
-      args: [etherAddress ?? `0x`, name ?? "", specialty ?? ""],
+      functionName: "addVisitHistoryByDoctor",
+      args: [patientId ?? "", date ?? "", diagnosis ?? "", prescription ?? ""],
+      account: address,
     });
   };
 
@@ -50,7 +47,7 @@ export default function EditDoctorPage({
   useTransactionToast(
     isConfirming,
     isConfirmed,
-    "Edit doctor successfully.",
+    "Create visit history successfully.",
     error,
   );
 
@@ -62,41 +59,43 @@ export default function EditDoctorPage({
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
         initialValues={{
-          etherAddress: doctorDetail?.etherAddress,
-          name: doctorDetail?.name,
-          specialty: doctorDetail?.specialty,
-          remember: true,
+          patientId: params.id,
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          label="Ether Address"
-          name="etherAddress"
-          rules={[
-            {
-              required: true,
-              message: "Please input doctor's etherAddress",
-            },
-          ]}
+          label="Patient Id"
+          name="patientId"
+          rules={[{ required: true, message: "Please input patient's id" }]}
         >
           <Input disabled />
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Name"
-          name="name"
-          rules={[{ required: true, message: "Please input doctor's name" }]}
+          label="Date"
+          name="date"
+          rules={[{ required: true, message: "Please input date" }]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Specialty"
-          name="specialty"
+          label="Diagnosis"
+          name="diagnosis"
           rules={[
-            { required: true, message: "Please input doctor's specialty" },
+            { required: true, message: "Please input patient's diagnosis" },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item<FieldType>
+          label="Prescription"
+          name="prescription"
+          rules={[
+            { required: true, message: "Please input patient's prescription" },
           ]}
         >
           <Input />
@@ -130,10 +129,7 @@ export default function EditDoctorPage({
       {hash && isConfirmed && (
         <div className="ml-10">
           Click to see transaction:{" "}
-          <Link
-            href={"https://sepolia-optimism.etherscan.io/tx/" + hash}
-            className=""
-          >
+          <Link href={"https://sepolia-optimism.etherscan.io/tx/" + hash}>
             {"https://sepolia-optimism.etherscan.io/tx/" + hash}
           </Link>
         </div>

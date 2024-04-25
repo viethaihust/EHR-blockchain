@@ -1,5 +1,5 @@
 "use client";
-import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useReadContract } from "wagmi";
 import { redirect } from "next/navigation";

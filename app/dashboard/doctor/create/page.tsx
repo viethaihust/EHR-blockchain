@@ -1,7 +1,7 @@
 "use client";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { Form, type FormProps, Input, Button, Spin } from "antd";
-import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
 import { useTransactionToast } from "@/app/components/useTransactionToast";
 import Link from "next/link";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -57,7 +57,7 @@ export default function CreateDoctorPage() {
           rules={[
             {
               required: true,
-              message: "Please input doctor&apos;s etherAddress",
+              message: "Please input doctor's etherAddress",
             },
           ]}
         >
@@ -67,9 +67,7 @@ export default function CreateDoctorPage() {
         <Form.Item<FieldType>
           label="Name"
           name="name"
-          rules={[
-            { required: true, message: "Please input doctor&apos;s name" },
-          ]}
+          rules={[{ required: true, message: "Please input doctor's name" }]}
         >
           <Input />
         </Form.Item>
@@ -78,7 +76,7 @@ export default function CreateDoctorPage() {
           label="Specialty"
           name="specialty"
           rules={[
-            { required: true, message: "Please input doctor&apos;s specialty" },
+            { required: true, message: "Please input doctor's specialty" },
           ]}
         >
           <Input />

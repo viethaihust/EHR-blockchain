@@ -1,16 +1,15 @@
 "use client";
 import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
-import { Button, Col, Divider, Row, Spin, Table } from "antd";
+import { Button, Col, Divider, Form, FormProps, Input, Row, Spin, Table } from "antd";
+import { useState } from "react";
 import { useReadContract } from "wagmi";
-import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  EditOutlined,
-  FormOutlined,
-} from "@ant-design/icons";
-import Link from "next/link";
+import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 
 const style: React.CSSProperties = { padding: "8px 0" };
+
+type FieldType = {
+  patientId?: string;
+};
 
 const columns = [
   {
@@ -40,42 +39,68 @@ const columns = [
   },
 ];
 
-export default function DetailsPatientPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const { data: patientDetail } = useReadContract({
+export default function PatientPage() {
+  const [patientId, setPatientId] = useState<any>(null);
+
+  const onFinish: FormProps<FieldType>["onFinish"] = values => {
+    const { patientId } = values;
+    setPatientId(patientId);
+  };
+
+  const { data: patientDetail, refetch: refetchPatient } = useReadContract({
     ...medicalRecordContract,
     functionName: "getPatient",
-    args: [params.id],
+    args: [patientId],
   });
 
   const { data: visitHistory } = useReadContract({
     ...medicalRecordContract,
     functionName: "getVisitHistoriesByPatient",
-    args: [params.id],
+    args: [patientId],
   });
-  
+
+  console.log(patientId);
+  console.log(patientDetail);
+
   return (
-    <>
-      <div className="m-20 px-10">
-        <Divider orientation="left">
-          Patient Details
-          {patientDetail && (
-            <>
-              <Link href={`/doctor/edit/${patientDetail.id}`}>
-                <Button type="default" size="small" style={{ marginLeft: 16 }}>
-                  <span>
-                    <EditOutlined style={{ marginRight: 4 }} />
-                    Edit
-                  </span>
-                </Button>
-              </Link>
-            </>
-          )}
-        </Divider>
-        {patientDetail ? (
+    <div className="mt-12 p-4">
+      <Form
+        name="basic"
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+        style={{ maxWidth: 600 }}
+        onFinish={onFinish}
+        autoComplete="off"
+      >
+        <Form.Item<FieldType>
+          label="Patient's id"
+          name="patientId"
+          rules={[
+            {
+              required: true,
+              message: "Please input patient's id",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            onClick={() => {
+              refetchPatient?.();
+            }}
+          >
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+
+      {patientDetail && (
+        <div className="px-10">
+          <Divider orientation="left">Patient Details</Divider>
           <div>
             <Row gutter={16}>
               <Col className="gutter-row" span={6}>
@@ -108,39 +133,22 @@ export default function DetailsPatientPage({
               </Col>
             </Row>
           </div>
-        ) : (
-          <div className="ml-20">
-            <Spin />
-          </div>
-        )}
+        </div>
+      )}
 
-        <Divider orientation="left" style={{ marginTop: "5rem" }}>
-          Visit History
-          {visitHistory && (
-            <>
-              <Link
-                href={`/doctor/create-visit-history/${visitHistory[0].patientId}`}
-              >
-                <Button type="default" size="small" style={{ marginLeft: 16 }}>
-                  <span>
-                    <FormOutlined style={{ marginRight: 4 }} />
-                    Create
-                  </span>
-                </Button>
-              </Link>
-            </>
-          )}
-        </Divider>
-        {visitHistory && (
-          <div>
-            <Table
-              dataSource={visitHistory}
-              columns={columns}
-              rowKey={record => record.date}
-            ></Table>
-          </div>
-        )}
-      </div>
-    </>
+      {visitHistory && (
+        <div>
+          <Divider orientation="left" style={{ marginTop: 50 }}>
+            Visit History
+          </Divider>
+
+          <Table
+            dataSource={visitHistory}
+            columns={columns}
+            rowKey={record => record.date}
+          ></Table>
+        </div>
+      )}
+    </div>
   );
 }

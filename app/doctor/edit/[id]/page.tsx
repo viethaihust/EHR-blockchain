@@ -5,7 +5,7 @@ import {
   useWriteContract,
 } from "wagmi";
 import { Form, type FormProps, Input, Button, Spin, Checkbox } from "antd";
-import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
 import { useTransactionToast } from "@/app/components/useTransactionToast";
 import Link from "next/link";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -100,9 +100,7 @@ export default function EditPatientPage({
           <Form.Item<FieldType>
             label="Patient Id"
             name="patientId"
-            rules={[
-              { required: true, message: "Please input patient&apos;s id" },
-            ]}
+            rules={[{ required: true, message: "Please input patient's id" }]}
           >
             <Input disabled />
           </Form.Item>
@@ -110,9 +108,7 @@ export default function EditPatientPage({
           <Form.Item<FieldType>
             label="Name"
             name="name"
-            rules={[
-              { required: true, message: "Please input patient&apos;s name" },
-            ]}
+            rules={[{ required: true, message: "Please input patient's name" }]}
           >
             <Input />
           </Form.Item>
@@ -121,7 +117,7 @@ export default function EditPatientPage({
             label="Weight"
             name="weight"
             rules={[
-              { required: true, message: "Please input patient&apos;s weight" },
+              { required: true, message: "Please input patient's weight" },
             ]}
           >
             <Input />
@@ -131,7 +127,7 @@ export default function EditPatientPage({
             label="Height"
             name="height"
             rules={[
-              { required: true, message: "Please input patient&apos;s height" },
+              { required: true, message: "Please input patient's height" },
             ]}
           >
             <Input />
@@ -143,7 +139,7 @@ export default function EditPatientPage({
             rules={[
               {
                 required: true,
-                message: "Please input patient&apos;s blood group",
+                message: "Please input patient's blood group",
               },
             ]}
           >
@@ -156,7 +152,7 @@ export default function EditPatientPage({
             rules={[
               {
                 required: true,
-                message: "Please input patient&apos;s blood pressure",
+                message: "Please input patient's blood pressure",
               },
             ]}
           >

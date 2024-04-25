@@ -5,7 +5,7 @@ import {
   useWriteContract,
 } from "wagmi";
 import { Form, type FormProps, Input, Button } from "antd";
-import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
 import Link from "next/link";
 import { useTransactionToast } from "@/app/components/useTransactionToast";
 

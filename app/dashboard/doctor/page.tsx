@@ -1,5 +1,5 @@
 "use client";
-import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
 import { Button, Table } from "antd";
 import Link from "next/link";
 import { useReadContract } from "wagmi";

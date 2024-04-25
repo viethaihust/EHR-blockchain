@@ -10,7 +10,7 @@ import {
   CloseCircleOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-import { medicalRecordContract } from "@/smart-contracts/ExampleAbi";
+import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
 import Link from "next/link";
 import { useTransactionToast } from "@/app/components/useTransactionToast";
 import { LoadingOutlined } from "@ant-design/icons";
