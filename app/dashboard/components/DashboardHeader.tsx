@@ -1,4 +1,5 @@
 "use client";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Button, Layout } from "antd";
 import { useRouter } from "next/navigation";
 
@@ -16,6 +17,8 @@ export default function DashboardHeader() {
       >
         Home
       </Button>
+
+      <ConnectButton />
     </Header>
   );
 }

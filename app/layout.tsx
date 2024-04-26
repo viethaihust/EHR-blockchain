@@ -3,6 +3,7 @@ import "./globals.scss";
 import "@rainbow-me/rainbowkit/styles.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import Provider from "./provider";
+import Setup from "./setup";
 
 const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   return (
@@ -10,7 +11,9 @@ const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
       <body>
         <Provider>
           <AntdRegistry>
-            <div className="flex min-h-screen flex-col">{children}</div>
+            <Setup>
+              <div className="flex min-h-screen flex-col">{children}</div>
+            </Setup>
           </AntdRegistry>
         </Provider>
       </body>

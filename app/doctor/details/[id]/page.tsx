@@ -119,7 +119,7 @@ export default function DetailsPatientPage({
           {visitHistory && (
             <>
               <Link
-                href={`/doctor/create-visit-history/${visitHistory[0].patientId}`}
+                href={`/doctor/create-visit-history/${visitHistory[0]?.patientId}`}
               >
                 <Button type="default" size="small" style={{ marginLeft: 16 }}>
                   <span>

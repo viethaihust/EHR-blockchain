@@ -1,9 +1,20 @@
 "use client";
 import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
-import { Button, Col, Divider, Form, FormProps, Input, Row, Spin, Table } from "antd";
-import { useState } from "react";
+import {
+  Button,
+  Col,
+  Divider,
+  Form,
+  FormProps,
+  Input,
+  Row,
+  Spin,
+  Table,
+} from "antd";
+import { useCallback, useEffect, useState } from "react";
 import { useReadContract } from "wagmi";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const style: React.CSSProperties = { padding: "8px 0" };
 
@@ -40,11 +51,46 @@ const columns = [
 ];
 
 export default function PatientPage() {
-  const [patientId, setPatientId] = useState<any>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const [form] = Form.useForm();
+  const [patientId, setPatientId] = useState<string>("");
+
+  const createQueryString = useCallback(
+    (patientId_: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("id", patientId_);
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  // state => route
+  useEffect(() => {
+    if (patientId) {
+      router.push(pathname + "?" + createQueryString(patientId));
+    } else {
+      router.push(pathname);
+    }
+  }, [router, patientId]);
+
+  //  route => state
+  useEffect(() => {
+    const patientId_ = searchParams.get("id") ?? "";
+    if (patientId_ !== patientId) {
+      setPatientId(patientId_);
+      form.setFieldValue("patientId", patientId_);
+    }
+  }, [searchParams]);
 
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
-    const { patientId } = values;
-    setPatientId(patientId);
+    if (patientId === values.patientId) {
+      console.log("refetchPatient");
+      refetchPatient?.();
+    }
+    setPatientId(values.patientId ?? "");
   };
 
   const { data: patientDetail, refetch: refetchPatient } = useReadContract({
@@ -59,13 +105,11 @@ export default function PatientPage() {
     args: [patientId],
   });
 
-  console.log(patientId);
-  console.log(patientDetail);
-
   return (
     <div className="mt-12 p-4">
       <Form
         name="basic"
+        form={form}
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
@@ -86,19 +130,15 @@ export default function PatientPage() {
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            onClick={() => {
-              refetchPatient?.();
-            }}
-          >
+          <Button type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>
       </Form>
 
-      {patientDetail && (
+      {!patientDetail || patientDetail.id === "" ? (
+        <div>null</div>
+      ) : (
         <div className="px-10">
           <Divider orientation="left">Patient Details</Divider>
           <div>
@@ -136,19 +176,17 @@ export default function PatientPage() {
         </div>
       )}
 
-      {visitHistory && (
-        <div>
-          <Divider orientation="left" style={{ marginTop: 50 }}>
-            Visit History
-          </Divider>
+      <div>
+        <Divider orientation="left" style={{ marginTop: 50 }}>
+          Visit History
+        </Divider>
 
-          <Table
-            dataSource={visitHistory}
-            columns={columns}
-            rowKey={record => record.date}
-          ></Table>
-        </div>
-      )}
+        <Table
+          dataSource={visitHistory ?? []}
+          columns={columns}
+          rowKey={record => record.date}
+        ></Table>
+      </div>
     </div>
   );
 }

@@ -1,8 +1,9 @@
-"use client"
+"use client";
 import { Button, Table } from "antd";
 import Link from "next/link";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import useGetPatients from "@/app/components/useGetPatients";
+import { useState } from "react";
 
 const columns = [
   {
@@ -43,7 +44,9 @@ const columns = [
       <span>
         {covidVaccinated ? (
           <CheckCircleOutlined style={{ fontSize: "20px", color: "green" }} />
-        ) : <CloseCircleOutlined style={{ fontSize: "20px", color: "red" }} />}
+        ) : (
+          <CloseCircleOutlined style={{ fontSize: "20px", color: "red" }} />
+        )}
       </span>
     ),
   },
@@ -64,17 +67,26 @@ const columns = [
 ];
 
 export default function DashboardPatientPage() {
-  const dataSource = useGetPatients();
+  const [pageSize, setPageSize] = useState(3);
+  const [pageNumber, setPageNumber] = useState(1);
+  const { patients, total } = useGetPatients({ pageSize, pageNumber });
 
   return (
     <div className="p-4">
-      {dataSource && (
-        <Table
-          dataSource={dataSource}
-          columns={columns}
-          rowKey={record => record.patientId}
-        />
-      )}
+      <Table
+        dataSource={patients}
+        columns={columns}
+        rowKey={record => record.patientId}
+        pagination={{
+          total,
+          pageSize,
+          defaultCurrent: pageNumber,
+          onChange(page_, pageSize_) {
+            setPageSize(pageSize_);
+            setPageNumber(page_);
+          },
+        }}
+      />
     </div>
   );
 }

@@ -1,119 +1,73 @@
 "use client";
-import { Button, Input, Table } from "antd";
-import useGetPatients from "../components/useGetPatients";
-import Link from "next/link";
-import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
-import { useState } from "react";
+import { wagmiConfig } from "@/config/wagmi";
+import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
+import { Select } from "antd";
+import { debounce } from "lodash-es";
+import { useCallback, useState } from "react";
+import { readContract } from "wagmi/actions";
 
 export default function DoctorPage() {
-  const dataSource = useGetPatients();
-  const [searchedText, setSearchedText] = useState<any>("");
+  const [options, setOptions] = useState<{
+    value: string;
+    label: string;
+    isCreated: boolean;
+  }>();
+  const [value, setValue] = useState<string>();
 
-  const columns = [
-    {
-      title: "Patient Id",
-      dataIndex: "patientId",
-      key: "patientId",
-      filteredValue: [searchedText],
-      onFilter: (value: any, record: any) => {
-        return (
-          String(record.patientId)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.name).toLowerCase().includes(value.toLowerCase())
-        );
-      },
-    },
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Weight",
-      dataIndex: "weight",
-      key: "weight",
-    },
-    {
-      title: "Height",
-      dataIndex: "height",
-      key: "height",
-    },
-    {
-      title: "Blood Group",
-      dataIndex: "bloodGroup",
-      key: "bloodGroup",
-    },
-    {
-      title: "Blood Pressure",
-      dataIndex: "bloodPressure",
-      key: "bloodPressure",
-    },
-    {
-      title: "Covid Vaccinated",
-      dataIndex: "covidVaccinated",
-      key: "covidVaccinated",
-      render: (covidVaccinated: boolean) => (
-        <span>
-          {covidVaccinated ? (
-            <CheckCircleOutlined style={{ fontSize: "20px", color: "green" }} />
-          ) : (
-            <CloseCircleOutlined style={{ fontSize: "20px", color: "red" }} />
-          )}
-        </span>
-      ),
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-      key: "action",
-      render: (_: any, record: any) => (
-        <span>
-          <Link href={`doctor/details/${record.patientId}`}>
-            <Button type="default" size="small">
-              Details
-            </Button>
-          </Link>
-        </span>
-      ),
-    },
-  ];
+  const onSearch = useCallback(
+    debounce(async (patientId_: string) => {
+      const patient = await readContract(wagmiConfig, {
+        ...medicalRecordContract,
+        functionName: "getPatient",
+        args: [patientId_],
+      });
+
+      if (patient.id === "") {
+        setOptions({
+          value: patientId_,
+          label: `Tạo mới bệnh có id ${patientId_}`,
+          isCreated: false,
+        });
+      } else {
+        setOptions({
+          value: patient.id,
+          label: `${patient.id} - ${patient.name}`,
+          isCreated: true,
+        });
+      }
+    }, 200),
+    [],
+  );
+
+  const onChange = (patientId_: string) => {
+    setValue(patientId_);
+    if (!options || options.value !== patientId_) return;
+    if (options.isCreated) {
+      // mở trang đăng ký khám
+    } else {
+      // mở trang tạo bệnh nhân
+    }
+  };
 
   return (
     <div className="m-40 p-16">
-      {dataSource && (
-        <div>
-          <div className="flex justify-between">
-            <div></div>
-            <Input.Search
-              placeholder="Search here..."
-              style={{ marginBottom: 20, marginLeft: 50, width: "18rem" }}
-              onSearch={value => {
-                setSearchedText(value);
-              }}
-              onChange={e => {
-                setSearchedText(e.target.value);
-              }}
-            />
-            <Link href="doctor/create">
-              <Button className="!inline-flex items-center">
-                <PlusCircleOutlined />
-                Create Patient
-              </Button>
-            </Link>
-          </div>
-
-          <Table
-            dataSource={dataSource}
-            columns={columns}
-            rowKey={record => record.patientId}
+      <div>
+        <div className="flex justify-between">
+          <Select
+            showSearch
+            value={value}
+            placeholder="Tìm kiếm bệnh nhân"
+            defaultActiveFirstOption={false}
+            suffixIcon={null}
+            filterOption={false}
+            onSearch={onSearch}
+            onChange={onChange}
+            notFoundContent={null}
+            options={options ? [options] : []}
+            className="w-96"
           />
         </div>
-      )}
+      </div>
     </div>
   );
 }
