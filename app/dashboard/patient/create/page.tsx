@@ -17,9 +17,14 @@ type FieldType = {
 };
 
 export default function CreatePatientPage() {
-  const { data: hash, error, isPending, writeContract } = useWriteContract();
+  const {
+    data: hash,
+    error,
+    isPending,
+    writeContractAsync,
+  } = useWriteContract();
 
-  const onFinish: FormProps<FieldType>["onFinish"] = values => {
+  const onFinish: FormProps<FieldType>["onFinish"] = async values => {
     const {
       patientId,
       name,
@@ -29,7 +34,8 @@ export default function CreatePatientPage() {
       bloodPressure,
       covidVaccinated,
     } = values;
-    writeContract({
+
+    await writeContractAsync({
       ...medicalRecordContract,
       functionName: "addEditPatient",
       args: [

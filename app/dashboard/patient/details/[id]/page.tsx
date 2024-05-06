@@ -1,8 +1,14 @@
 "use client";
 import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
-import { Col, Divider, Row, Spin, Table } from "antd";
+import { Button, Col, Divider, Row, Spin, Table } from "antd";
 import { useReadContract } from "wagmi";
-import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  FormOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
+import Link from "next/link";
 
 const style: React.CSSProperties = { padding: "8px 0" };
 
@@ -54,7 +60,21 @@ export default function DetailsPatientPage({
   return (
     <>
       <div className="px-10">
-        <Divider orientation="left">Patient Details</Divider>
+        <Divider orientation="left">
+          Patient Details{" "}
+          {patientDetail && (
+            <>
+              <Link href={`/dashboard/patient/edit/${patientDetail.id}`}>
+                <Button type="default" size="small" style={{ marginLeft: 16 }}>
+                  <span>
+                    <EditOutlined style={{ marginRight: 4 }} />
+                    Edit
+                  </span>
+                </Button>
+              </Link>
+            </>
+          )}
+        </Divider>
         {patientDetail ? (
           <div>
             <Row gutter={16}>
@@ -96,6 +116,20 @@ export default function DetailsPatientPage({
 
         <Divider orientation="left" style={{ marginTop: 50 }}>
           Visit History
+          {visitHistory && (
+            <>
+              <Link
+                href={`/doctor/create-visit-history/${visitHistory[0]?.patientId}`}
+              >
+                <Button type="default" size="small" style={{ marginLeft: 16 }}>
+                  <span>
+                    <FormOutlined style={{ marginRight: 4 }} />
+                    Create
+                  </span>
+                </Button>
+              </Link>
+            </>
+          )}
         </Divider>
         {visitHistory && (
           <div>

@@ -3,10 +3,12 @@ import { wagmiConfig } from "@/config/wagmi";
 import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
 import { Select } from "antd";
 import { debounce } from "lodash-es";
+import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { readContract } from "wagmi/actions";
 
 export default function DoctorPage() {
+  const router = useRouter();
   const [options, setOptions] = useState<{
     value: string;
     label: string;
@@ -43,9 +45,9 @@ export default function DoctorPage() {
     setValue(patientId_);
     if (!options || options.value !== patientId_) return;
     if (options.isCreated) {
-      // mở trang đăng ký khám
+      router.push(`dashboard/patient/details/${patientId_}`);
     } else {
-      // mở trang tạo bệnh nhân
+      router.push(`dashboard/patient/create`);
     }
   };
 
