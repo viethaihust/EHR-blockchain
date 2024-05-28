@@ -5,6 +5,8 @@ import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
 import { useTransactionToast } from "@/app/components/useTransactionToast";
 import Link from "next/link";
 import { LoadingOutlined } from "@ant-design/icons";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 type FieldType = {
   patientId?: string;
@@ -16,7 +18,10 @@ type FieldType = {
   covidVaccinated?: boolean;
 };
 
-export default function CreatePatientPage() {
+function CreatePatientForm() {
+  const searchParams = useSearchParams();
+  const patientId = searchParams.get("patientId");
+
   const {
     data: hash,
     error,
@@ -41,10 +46,10 @@ export default function CreatePatientPage() {
       args: [
         patientId ?? "",
         name ?? "",
-        weight ?? BigInt(0),
-        height ?? BigInt(0),
+        weight ? BigInt(weight) : BigInt(0),
+        height ? BigInt(height) : BigInt(0),
         bloodGroup ?? "",
-        bloodPressure ?? BigInt(0),
+        bloodPressure ? BigInt(bloodPressure) : BigInt(0),
         covidVaccinated ?? false,
       ],
     });
@@ -62,7 +67,7 @@ export default function CreatePatientPage() {
   useTransactionToast(
     isConfirming,
     isConfirmed,
-    "Create patient successfully.",
+    "Tạo bệnh nhân thành công.",
     error,
   );
 
@@ -73,12 +78,15 @@ export default function CreatePatientPage() {
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
+        initialValues={{
+          patientId: patientId,
+        }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          label="Patient Id"
+          label="Id bệnh nhân"
           name="patientId"
           rules={[{ required: true, message: "Please input patient's id" }]}
         >
@@ -86,7 +94,7 @@ export default function CreatePatientPage() {
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Name"
+          label="Họ và tên"
           name="name"
           rules={[{ required: true, message: "Please input patient's name" }]}
         >
@@ -94,7 +102,7 @@ export default function CreatePatientPage() {
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Weight"
+          label="Cân nặng"
           name="weight"
           rules={[{ required: true, message: "Please input patient's weight" }]}
         >
@@ -102,7 +110,7 @@ export default function CreatePatientPage() {
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Height"
+          label="Chiều cao"
           name="height"
           rules={[{ required: true, message: "Please input patient's height" }]}
         >
@@ -110,7 +118,7 @@ export default function CreatePatientPage() {
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Blood Group"
+          label="Nhóm máu"
           name="bloodGroup"
           rules={[
             {
@@ -123,7 +131,7 @@ export default function CreatePatientPage() {
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Blood Pressure"
+          label="Huyết áp"
           name="bloodPressure"
           rules={[
             {
@@ -136,7 +144,7 @@ export default function CreatePatientPage() {
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Covid Vaccinated"
+          label="Đã tiêm vắc xin covid"
           name="covidVaccinated"
           valuePropName="checked"
         >
@@ -159,7 +167,7 @@ export default function CreatePatientPage() {
                 }
               />
             ) : isPending ? (
-              "Confirming..."
+              "Đang xác nhận..."
             ) : (
               "Submit"
             )}
@@ -176,5 +184,13 @@ export default function CreatePatientPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function CreatePatientPage() {
+  return (
+    <Suspense fallback={<div>Đang tải...</div>}>
+      <CreatePatientForm />
+    </Suspense>
   );
 }

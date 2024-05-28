@@ -1,4 +1,5 @@
 import { Button } from "antd";
+import Image from "next/image";
 import React from "react";
 
 export default function HomeOffer() {
@@ -6,25 +7,36 @@ export default function HomeOffer() {
     <div className="m-auto grid max-w-[1400px] gap-4 px-4 py-16 lg:grid-cols-2">
       {/* Left Side */}
       <div className="grid h-[60vh] grid-cols-2 grid-rows-4">
-        <img
-          className="row-span-4 h-full w-full object-cover p-2"
-          src="/offer1.jpg"
-          alt="/"
-        />
-        <img
-          className="row-span-2 h-full w-full object-cover p-2"
-          src="/offer2.jpg"
-          alt="/"
-        />
-        <img
-          className="row-span-2 h-full w-full object-cover p-2"
-          src="/offer3.jpg"
-          alt="/"
-        />
+        <div className="relative row-span-4 m-2">
+          <Image
+            src="/offer1.jpg"
+            alt="Offer 1"
+            fill
+            style={{ objectFit: "cover" }}
+          />
+        </div>
+        <div className="relative row-span-2 m-2">
+          <Image
+            src="/offer2.jpg"
+            alt="Offer 2"
+            fill
+            style={{ objectFit: "cover" }}
+          />
+        </div>
+        <div className="relative row-span-2 m-2">
+          <Image
+            src="/offer3.jpg"
+            alt="Offer 3"
+            fill
+            style={{ objectFit: "cover" }}
+          />
+        </div>
       </div>
       {/* Right Side */}
       <div className="flex h-full flex-col justify-center">
-        <h3 className="text-5xl font-bold md:text-6xl">Blockchain Medical System</h3>
+        <h3 className="text-5xl font-bold md:text-6xl">
+          Blockchain Medical System
+        </h3>
         <p className="py-6 text-2xl">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias,
           nam?

@@ -4,8 +4,11 @@ import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
 import { Select } from "antd";
 import { debounce } from "lodash-es";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useMemo, useState } from "react";
 import { readContract } from "wagmi/actions";
+import {
+  SearchOutlined
+} from "@ant-design/icons";
 
 export default function DoctorPage() {
   const router = useRouter();
@@ -16,28 +19,29 @@ export default function DoctorPage() {
   }>();
   const [value, setValue] = useState<string>();
 
-  const onSearch = useCallback(
-    debounce(async (patientId_: string) => {
-      const patient = await readContract(wagmiConfig, {
-        ...medicalRecordContract,
-        functionName: "getPatient",
-        args: [patientId_],
-      });
+  const onSearch = useMemo(
+    () =>
+      debounce(async (patientId_: string) => {
+        const patient = await readContract(wagmiConfig, {
+          ...medicalRecordContract,
+          functionName: "getPatient",
+          args: [patientId_],
+        });
 
-      if (patient.id === "") {
-        setOptions({
-          value: patientId_,
-          label: `Tạo mới bệnh có id ${patientId_}`,
-          isCreated: false,
-        });
-      } else {
-        setOptions({
-          value: patient.id,
-          label: `${patient.id} - ${patient.name}`,
-          isCreated: true,
-        });
-      }
-    }, 200),
+        if (patient.id === "") {
+          setOptions({
+            value: patientId_,
+            label: `Tạo mới bệnh có id ${patientId_}`,
+            isCreated: false,
+          });
+        } else {
+          setOptions({
+            value: patient.id,
+            label: `${patient.id} - ${patient.name}`,
+            isCreated: true,
+          });
+        }
+      }, 200),
     [],
   );
 
@@ -47,20 +51,20 @@ export default function DoctorPage() {
     if (options.isCreated) {
       router.push(`dashboard/patient/details/${patientId_}`);
     } else {
-      router.push(`dashboard/patient/create`);
+      router.push(`dashboard/patient/create?patientId=${patientId_}`);
     }
   };
 
   return (
-    <div className="m-40 p-16">
-      <div>
+    <div className="flex h-full items-center justify-center bg-gray-100">
+      <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-lg">
         <div className="flex justify-between">
           <Select
             showSearch
             value={value}
             placeholder="Tìm kiếm bệnh nhân"
             defaultActiveFirstOption={false}
-            suffixIcon={null}
+            suffixIcon={<SearchOutlined />}
             filterOption={false}
             onSearch={onSearch}
             onChange={onChange}

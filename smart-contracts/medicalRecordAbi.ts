@@ -1,5 +1,5 @@
 export const medicalRecordContract = {
-  address: "0x6a520891BB933f14a47B3efD81370ac9f83ECb43",
+  address: "0x2F78BC3a839Fd0948cceaEf2dfAe6e71Bd93E733",
   abi: [
     { inputs: [], stateMutability: "nonpayable", type: "constructor" },
     {
@@ -8,7 +8,7 @@ export const medicalRecordContract = {
         { internalType: "string", name: "name", type: "string" },
         { internalType: "string", name: "specialty", type: "string" },
       ],
-      name: "addEditDoctorData",
+      name: "addEditDoctor",
       outputs: [],
       stateMutability: "nonpayable",
       type: "function",
@@ -61,7 +61,7 @@ export const medicalRecordContract = {
             { internalType: "string", name: "specialty", type: "string" },
             { internalType: "bool", name: "isApproved", type: "bool" },
           ],
-          internalType: "struct Example.Doctor",
+          internalType: "struct Medical.Doctor",
           name: "",
           type: "tuple",
         },
@@ -106,7 +106,7 @@ export const medicalRecordContract = {
             { internalType: "uint256", name: "bloodPressure", type: "uint256" },
             { internalType: "bool", name: "covidVaccinated", type: "bool" },
           ],
-          internalType: "struct Example.Patient",
+          internalType: "struct Medical.Patient",
           name: "",
           type: "tuple",
         },
@@ -159,7 +159,7 @@ export const medicalRecordContract = {
             { internalType: "string", name: "diagnosis", type: "string" },
             { internalType: "string", name: "prescription", type: "string" },
           ],
-          internalType: "struct Example.VisitHistory[]",
+          internalType: "struct Medical.VisitHistory[]",
           name: "",
           type: "tuple[]",
         },

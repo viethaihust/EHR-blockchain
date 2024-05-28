@@ -30,7 +30,6 @@ export default function EditPatientPage({
     functionName: "getPatient",
     args: [params.id],
   });
-  console.log(patientDetail);
 
   const { data: hash, error, isPending, writeContract } = useWriteContract();
 
@@ -71,7 +70,7 @@ export default function EditPatientPage({
   useTransactionToast(
     isConfirming,
     isConfirmed,
-    "Edit patient successfully.",
+    "Sửa bệnh nhân thành công.",
     error,
   );
 
@@ -98,7 +97,7 @@ export default function EditPatientPage({
           autoComplete="off"
         >
           <Form.Item<FieldType>
-            label="Patient Id"
+            label="Id bệnh nhân"
             name="patientId"
             rules={[{ required: true, message: "Please input patient's id" }]}
           >
@@ -106,7 +105,7 @@ export default function EditPatientPage({
           </Form.Item>
 
           <Form.Item<FieldType>
-            label="Name"
+            label="Họ và tên"
             name="name"
             rules={[{ required: true, message: "Please input patient's name" }]}
           >
@@ -114,7 +113,7 @@ export default function EditPatientPage({
           </Form.Item>
 
           <Form.Item<FieldType>
-            label="Weight"
+            label="Cân nặng"
             name="weight"
             rules={[
               { required: true, message: "Please input patient's weight" },
@@ -124,7 +123,7 @@ export default function EditPatientPage({
           </Form.Item>
 
           <Form.Item<FieldType>
-            label="Height"
+            label="Chiều cao"
             name="height"
             rules={[
               { required: true, message: "Please input patient's height" },
@@ -134,7 +133,7 @@ export default function EditPatientPage({
           </Form.Item>
 
           <Form.Item<FieldType>
-            label="Blood Group"
+            label="Nhóm máu"
             name="bloodGroup"
             rules={[
               {
@@ -147,7 +146,7 @@ export default function EditPatientPage({
           </Form.Item>
 
           <Form.Item<FieldType>
-            label="Blood Pressure"
+            label="Huyết áp"
             name="bloodPressure"
             rules={[
               {
@@ -160,7 +159,7 @@ export default function EditPatientPage({
           </Form.Item>
 
           <Form.Item<FieldType>
-            label="Covid Vaccinated"
+            label="Đã tiêm vắc xin covid"
             name="covidVaccinated"
             valuePropName="checked"
           >

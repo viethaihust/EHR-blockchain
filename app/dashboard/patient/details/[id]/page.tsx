@@ -14,27 +14,27 @@ const style: React.CSSProperties = { padding: "8px 0" };
 
 const columns = [
   {
-    title: "Patient Id",
+    title: "Id bệnh nhân",
     dataIndex: "patientId",
     key: "patientId",
   },
   {
-    title: "Doctor Address",
+    title: "Địa chỉ ethereum của bác sĩ",
     dataIndex: "doctorAddress",
     key: "doctorAddress",
   },
   {
-    title: "Date",
+    title: "Ngày",
     dataIndex: "date",
     key: "date",
   },
   {
-    title: "Diagnosis",
+    title: "Chẩn đoán",
     dataIndex: "diagnosis",
     key: "diagnosis",
   },
   {
-    title: "Prescription",
+    title: "Đơn thuốc",
     dataIndex: "prescription",
     key: "prescription",
   },
@@ -56,19 +56,19 @@ export default function DetailsPatientPage({
     functionName: "getVisitHistoriesByPatient",
     args: [params.id],
   });
-  console.log(patientDetail);
+
   return (
     <>
       <div className="px-10">
         <Divider orientation="left">
-          Patient Details{" "}
+          Chi tiết bệnh nhân{" "}
           {patientDetail && (
             <>
               <Link href={`/dashboard/patient/edit/${patientDetail.id}`}>
                 <Button type="default" size="small" style={{ marginLeft: 16 }}>
                   <span>
                     <EditOutlined style={{ marginRight: 4 }} />
-                    Edit
+                    Sửa
                   </span>
                 </Button>
               </Link>
@@ -79,26 +79,26 @@ export default function DetailsPatientPage({
           <div>
             <Row gutter={16}>
               <Col className="gutter-row" span={6}>
-                <div style={style}>Patient Id: {patientDetail.id}</div>
-                <div style={style}>Name: {patientDetail.name}</div>
+                <div style={style}>Id bệnh nhân: {patientDetail.id}</div>
+                <div style={style}>Họ và tên: {patientDetail.name}</div>
               </Col>
               <Col className="gutter-row" span={6}>
                 <div style={style}>
-                  Weight: {patientDetail.weight.toString()} kg
+                  Cân nặng: {patientDetail.weight.toString()} kg
                 </div>
                 <div style={style}>
-                  Height: {patientDetail.height.toString()} cm
-                </div>
-              </Col>
-              <Col className="gutter-row" span={6}>
-                <div style={style}>Blood Group: {patientDetail.bloodGroup}</div>
-                <div style={style}>
-                  Blood Pressure: {patientDetail.bloodPressure.toString()} mmHg
+                  Chiều cao: {patientDetail.height.toString()} cm
                 </div>
               </Col>
               <Col className="gutter-row" span={6}>
+                <div style={style}>Nhóm máu: {patientDetail.bloodGroup}</div>
                 <div style={style}>
-                  Covid Vaccinated:{" "}
+                  Huyết áp: {patientDetail.bloodPressure.toString()} mmHg
+                </div>
+              </Col>
+              <Col className="gutter-row" span={6}>
+                <div style={style}>
+                  Đã tiêm vắc xin covid:{" "}
                   {patientDetail.covidVaccinated ? (
                     <CheckCircleOutlined style={{ color: "green" }} />
                   ) : (
@@ -115,28 +115,24 @@ export default function DetailsPatientPage({
         )}
 
         <Divider orientation="left" style={{ marginTop: 50 }}>
-          Visit History
-          {visitHistory && (
-            <>
-              <Link
-                href={`/doctor/create-visit-history/${visitHistory[0]?.patientId}`}
-              >
-                <Button type="default" size="small" style={{ marginLeft: 16 }}>
-                  <span>
-                    <FormOutlined style={{ marginRight: 4 }} />
-                    Create
-                  </span>
-                </Button>
-              </Link>
-            </>
-          )}
+          Lịch sử lần khám
+          <Link
+            href={patientDetail?.id ? `/dashboard/patient/create-visit-history/${patientDetail.id}` : '#'}
+          >
+            <Button type="default" size="small" style={{ marginLeft: 16 }}>
+              <span>
+                <FormOutlined style={{ marginRight: 4 }} />
+                Tạo
+              </span>
+            </Button>
+          </Link>
         </Divider>
         {visitHistory && (
           <div>
             <Table
               dataSource={visitHistory}
               columns={columns}
-              rowKey={record => record.patientId}
+              rowKey={record => record.date}
             ></Table>
           </div>
         )}

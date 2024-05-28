@@ -19,7 +19,7 @@ export default function CreateDoctorPage() {
     const { etherAddress, name, specialty } = values;
     writeContract({
       ...medicalRecordContract,
-      functionName: "addEditDoctorData",
+      functionName: "addEditDoctor",
       args: [etherAddress ?? `0x`, name ?? "", specialty ?? ""],
     });
   };
@@ -36,7 +36,7 @@ export default function CreateDoctorPage() {
   useTransactionToast(
     isConfirming,
     isConfirmed,
-    "Create doctor successfully.",
+    "Tạo bác sĩ thành công.",
     error,
   );
 
@@ -52,12 +52,12 @@ export default function CreateDoctorPage() {
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          label="Ether Address"
+          label="Địa chỉ ethereum"
           name="etherAddress"
           rules={[
             {
               required: true,
-              message: "Please input doctor's etherAddress",
+              message: "Vui lòng nhập địa chỉ ethereum của bác sĩ",
             },
           ]}
         >
@@ -65,18 +65,20 @@ export default function CreateDoctorPage() {
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Name"
+          label="Họ và tên"
           name="name"
-          rules={[{ required: true, message: "Please input doctor's name" }]}
+          rules={[
+            { required: true, message: "Vui lòng nhập họ và tên của bác sĩ" },
+          ]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Specialty"
+          label="Chuyên môn"
           name="specialty"
           rules={[
-            { required: true, message: "Please input doctor's specialty" },
+            { required: true, message: "Vui lòng nhập chuyên môn của bác sĩ" },
           ]}
         >
           <Input />
@@ -99,7 +101,7 @@ export default function CreateDoctorPage() {
                 }
               />
             ) : isPending ? (
-              "Confirming..."
+              "Đang xác nhận..."
             ) : (
               "Submit"
             )}

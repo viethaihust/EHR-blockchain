@@ -4,11 +4,13 @@ import {
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
-import { Form, type FormProps, Input, Button, Spin } from "antd";
+import { Form, type FormProps, Input, Button, Spin, DatePicker, DatePickerProps } from "antd";
 import { medicalRecordContract } from "@/smart-contracts/medicalRecordAbi";
 import { useTransactionToast } from "@/app/components/useTransactionToast";
 import Link from "next/link";
 import { LoadingOutlined } from "@ant-design/icons";
+import locale from "antd/es/date-picker/locale/vi_VN";
+import moment from "moment";
 
 type FieldType = {
   patientId?: string;
@@ -27,10 +29,11 @@ export default function CreateVisitHistoryPage({
 
   const onFinish: FormProps<FieldType>["onFinish"] = values => {
     const { patientId, date, diagnosis, prescription } = values;
+    const formattedDate = date ? moment(date).format("DD-MM-YYYY") : "";
     writeContract({
       ...medicalRecordContract,
       functionName: "addVisitHistoryByDoctor",
-      args: [patientId ?? "", date ?? "", diagnosis ?? "", prescription ?? ""],
+      args: [patientId ?? "", formattedDate, diagnosis ?? "", prescription ?? ""],
       account: address,
     });
   };
@@ -47,7 +50,7 @@ export default function CreateVisitHistoryPage({
   useTransactionToast(
     isConfirming,
     isConfirmed,
-    "Create visit history successfully.",
+    "Tạo lịch sử lần khám thành công.",
     error,
   );
 
@@ -60,13 +63,14 @@ export default function CreateVisitHistoryPage({
         style={{ maxWidth: 600 }}
         initialValues={{
           patientId: params.id,
+          date: moment(),
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          label="Patient Id"
+          label="Id bệnh nhân"
           name="patientId"
           rules={[{ required: true, message: "Please input patient's id" }]}
         >
@@ -74,15 +78,15 @@ export default function CreateVisitHistoryPage({
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Date"
+          label="Ngày"
           name="date"
           rules={[{ required: true, message: "Please input date" }]}
         >
-          <Input />
+          <DatePicker locale={locale} format="DD-MM-YYYY"/>
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Diagnosis"
+          label="Chẩn đoán"
           name="diagnosis"
           rules={[
             { required: true, message: "Please input patient's diagnosis" },
@@ -92,7 +96,7 @@ export default function CreateVisitHistoryPage({
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Prescription"
+          label="Đơn thuốc"
           name="prescription"
           rules={[
             { required: true, message: "Please input patient's prescription" },

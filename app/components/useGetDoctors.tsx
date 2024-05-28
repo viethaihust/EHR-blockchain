@@ -8,10 +8,10 @@ const useGetDoctors = ({
   pageSize: number;
   pageNumber: number; // from 1
 }) => {
-    const { data: doctorLength } = useReadContract({
-        ...medicalRecordContract,
-        functionName: "getDoctorsLength",
-      });
+  const { data: doctorLength } = useReadContract({
+    ...medicalRecordContract,
+    functionName: "getDoctorsLength",
+  });
 
   const total = isFinite(Number(doctorLength)) ? Number(doctorLength) : 0;
 
@@ -37,8 +37,8 @@ const useGetDoctors = ({
     for (let i = 0; i < length; i++) {
       const doctor = {
         etherAddress: doctors_[1][i],
-        name: doctors_[2][i],
-        specialty: doctors_[3][i],
+        specialty: doctors_[2][i],
+        name: doctors_[3][i],
         isApproved: doctors_[4][i],
       };
       doctors.push(doctor);

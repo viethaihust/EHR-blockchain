@@ -12,7 +12,7 @@ export function useTransactionToast(
 
   useEffect(() => {
     if (isConfirming) {
-      toastRef.current = toast.loading("Waiting for confirmation...");
+      toastRef.current = toast.loading("Đang chờ đợi xác nhận...");
     } else if (isConfirmed) {
       if (toastRef.current) {
         toast.update(toastRef.current, {

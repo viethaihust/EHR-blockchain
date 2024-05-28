@@ -1,9 +1,9 @@
 import { useRole } from "@/hooks/role";
 import {
-  BankOutlined,
-  ReconciliationOutlined,
+  SearchOutlined,
   SolutionOutlined,
   TeamOutlined,
+  DashboardOutlined
 } from "@ant-design/icons";
 import { Layout, Menu, MenuProps } from "antd";
 import Link from "next/link";
@@ -15,27 +15,26 @@ const { Sider } = Layout;
 export default function DashboardSidebar() {
   const pathname = usePathname();
   const { role } = useRole();
-  console.log(role);
 
   const sideItems: MenuProps["items"] = useMemo(
     () =>
       [
         {
+          key: "/dashboard",
+          label: <Link href="/dashboard">Tìm kiếm</Link>,
+          icon: <SearchOutlined />,
+          roles: ["doctor-approved"],
+        },
+        {
           key: "/dashboard/doctor",
-          label: <Link href="/dashboard/doctor">Doctor</Link>,
+          label: <Link href="/dashboard/doctor">Bác sĩ</Link>,
           icon: <SolutionOutlined />,
           roles: ["admin"],
         },
         {
           key: "/dashboard/patient",
-          label: <Link href="/dashboard/patient">Patient</Link>,
+          label: <Link href="/dashboard/patient">Bệnh nhân</Link>,
           icon: <TeamOutlined />,
-          roles: ["admin", "doctor-approved"],
-        },
-        {
-          key: "/dashboard/record",
-          label: <Link href="/dashboard/record">Record</Link>,
-          icon: <ReconciliationOutlined />,
           roles: ["admin", "doctor-approved"],
         },
       ].filter(item => item.roles.includes(role)),
